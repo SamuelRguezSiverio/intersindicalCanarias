@@ -1,0 +1,12 @@
+.card-enter {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.home-card {
+  transition: transform 0.3s ease;
+}
+
+.card-leave {
+  transform: scale(1);
+}
