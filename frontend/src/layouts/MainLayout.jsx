@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   IconButton,
@@ -8,40 +7,44 @@ import {
   MenuItem,
   Toolbar,
   Typography,
-} from '@mui/material'
-
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { Box } from '@mui/system'
+} from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Box } from '@mui/system';
 
 function MainLayout() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [username, setUsername] = useState('')
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [username, setUsername] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false); // Estado para almacenar si el usuario es administrador
 
   useEffect(() => {
-    // Suponiendo que el nombre de usuario se almacena en localStorage después del inicio de sesión
-    const loggedInUsername = localStorage.getItem('name')
-    setUsername(loggedInUsername)
-  }, [])
+    // Suponiendo que el nombre de usuario y el estado de administrador se almacenan en localStorage después del inicio de sesión
+    const loggedInUsername = localStorage.getItem('name');
+    const adminStatus = localStorage.getItem('isAdmin') === 'true'; // Asegúrate de que 'isAdmin' se almacene como un string
+    setUsername(loggedInUsername);
+    setIsAdmin(adminStatus);
+  }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function openMenu(event) {
-    setAnchorEl(event.currentTarget)
-    setIsMenuOpen(true)
+    setAnchorEl(event.currentTarget);
+    setIsMenuOpen(true);
   }
 
   function closeMenu() {
-    setAnchorEl(null)
-    setIsMenuOpen(false)
+    setAnchorEl(null);
+    setIsMenuOpen(false);
   }
 
   function onLogout() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('isAdmin')
-    localStorage.removeItem('name')
-    localStorage.removeItem('id')
-    navigate('/')
+    // Aquí también deberías actualizar el estado de isAdmin
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('name');
+    localStorage.removeItem('id');
+    setIsAdmin(false); // Actualizar el estado de isAdmin
+    navigate('/');
   }
 
   return (
@@ -55,43 +58,38 @@ function MainLayout() {
         }}
       >
         <Box sx={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center' }}>
-          <IconButton onClick={(event) => openMenu(event)}>
+          <IconButton onClick={openMenu}>
             <AccountCircleIcon sx={{ color: 'white' }} />
           </IconButton>
           <Menu
             open={isMenuOpen}
             anchorEl={anchorEl}
-            onClose={() => closeMenu()}
+            onClose={closeMenu}
           >
-            <MenuItem
-  sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
-  onClick={() => navigate('/profile')}
->
-  Mi perfil
-</MenuItem>
-
+    <MenuItem
+              sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
+              onClick={() => navigate(isAdmin ? '/admin' : '/home')}
+            >
+              Inicio
+            </MenuItem>
             <MenuItem
               sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
-              onClick={() => onLogout()}
+              onClick={() => navigate('/profile')}
+            >
+              Mi perfil
+            </MenuItem>
+            <MenuItem
+              sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
+              onClick={onLogout}
             >
               Salir
             </MenuItem>
           </Menu>
           <Typography variant="h6">Bienvenido, {username}</Typography>
         </Box>
-        {/* <Box>
-          <Link to={'/home'}>
-            <Button
-              sx={{ backgroundColor: 'white', color: 'blue' }}
-              variant="raised"
-            >
-              Home
-            </Button>
-          </Link>
-        </Box> */}
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
-export default MainLayout
+export default MainLayout;

@@ -171,7 +171,6 @@ function SignupCard({ changeToLogin }) {
             error={!!errors.nif}
             helperText={errors.nif}
             sx={{ marginBottom: '20px' }}
-            inputProps={{ style: { textTransform: 'uppercase' } }}
           />
 
           <CssTextField

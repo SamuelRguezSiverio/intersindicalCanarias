@@ -70,16 +70,24 @@ const validatePassword = (password) => {
 
 async function signup(req, res) {
   try {
-    const { name, surName, nif, email, password, mobile, category, hospital } = req.body;
+    let { name, surName, nif, email, password, mobile, category, hospital } = req.body;
+
+    console.log('Inicio del registro:', req.body); // Log de inicio
+
+    // Convertir la letra del NIF a mayúscula
+    nif = nif.toUpperCase();
 
     // Validaciones
     if (!validateEmail(email)) {
+      console.error('Error de validación: Email inválido');
       return res.status(400).send('El formato del email no es válido.');
     }
     if (!validateNIF(nif)) {
+      console.error('Error de validación: NIF inválido');
       return res.status(400).send('El formato del NIF no es válido.');
     }
     if (!validatePassword(password)) {
+      console.error('Error de validación: Contraseña inválida');
       return res.status(400).send('La contraseña debe tener al menos 8 caracteres incluyendo una letra mayúscula y un número.');
     }
 
@@ -96,8 +104,8 @@ async function signup(req, res) {
       mobile,
       category,
       hospital,
-      isAdmin: false, // Por defecto no son administradores
-      isActive: false, // La cuenta debe estar inactiva desde el inicio
+      isAdmin: false,
+      isActive: false,
     }, {
       fields: [
         'name',
@@ -113,16 +121,27 @@ async function signup(req, res) {
       ],
     });
 
+    console.log('Administrador creado con éxito:', { id: admin.id, email: admin.email }); // Log de éxito
+
     // Generar el token JWT
     const payload = { email: admin.email };
     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
 
+    console.log('Token generado:', token); // Log del token
+
     return res.status(200).json({ token: token });
   } catch (error) {
+    console.error('Error en la función signup:', error); // Log del error
+
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).send('El email ya está en uso.');
+      const field = error.errors[0].path;
+      console.error('Error de restricción de unicidad:', field);
+      if (field === 'email') {
+        return res.status(400).send('El email ya está en uso.');
+      } else {
+        return res.status(400).send(`El campo ${field} ya está en uso.`);
+      }
     }
-    // Otros manejos de errores específicos...
     return res.status(500).send(error.message);
   }
 }
