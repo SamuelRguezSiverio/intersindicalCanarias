@@ -2,6 +2,48 @@ const Admin = require('../models/adminModel')
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+
+// Configuración del transportador de nodemailer
+const transporter = nodemailer.createTransport({
+  host: 'smtp.alzados.org',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'info@alzados.org', // Reemplaza con tu usuario
+    pass: 'sW71<A1Y>9_.' // Reemplaza con tu contraseña
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
+// Función para enviar emails
+const sendEmail = (to, subject, text) => {
+  const mailOptions = {
+    from: 'info@alzados.org', // Reemplaza con tu correo
+    to: to,
+    subject: subject,
+    text: text
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error al enviar el correo:', error);
+    } else {
+      console.log('Correo enviado:', info.response);
+    }
+  });
+};
+
+// Mapeo de hospitales a correos electrónicos de administradores
+const hospitalEmailMap = {
+  'HUC - LA PALMA': 'intersindicalhuc@alzados.org',
+  'HUNSC - LA GOMERA - EL HIERRO': 'intersindicalhunsc@alzados.org',
+  'GRAN CANARIA': 'intersindicalgrancanaria@alzados.org',
+  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
+  'LANZAROTE': 'intersindicallanzarote@alzados.org'
+};
 
 async function login(req, res) {
   try {
@@ -127,23 +169,40 @@ async function signup(req, res) {
     const payload = { email: admin.email };
     const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
 
-    console.log('Token generado:', token); // Log del token
+    // Log del token
+    console.log('Token generado:', token); 
+// Obtener el correo electrónico del administrador basado en el hospital
+const adminEmail = hospitalEmailMap[hospital];
 
-    return res.status(200).json({ token: token });
-  } catch (error) {
-    console.error('Error en la función signup:', error); // Log del error
+if (adminEmail) {
+  // Enviar correo electrónico al usuario registrado
+  sendEmail(email, 'Registro exitoso', 'Te has registrado exitosamente.');
 
-    if (error.name === 'SequelizeUniqueConstraintError') {
-      const field = error.errors[0].path;
-      console.error('Error de restricción de unicidad:', field);
-      if (field === 'email') {
-        return res.status(400).send('El email ya está en uso.');
-      } else {
-        return res.status(400).send(`El campo ${field} ya está en uso.`);
-      }
-    }
-    return res.status(500).send(error.message);
+  // Enviar correo electrónico al administrador correspondiente
+  sendEmail(adminEmail, 'Nuevo registro', `El usuario ${email} se ha registrado exitosamente.`);
+} else {
+  console.error('Hospital no encontrado en el mapeo');
+}
+
+// Respuesta exitosa
+return res.status(200).json({ token: token });
+} catch (error) {
+// Log del error
+console.error('Error en la función signup:', error);
+
+// Manejo de errores específicos
+if (error.name === 'SequelizeUniqueConstraintError') {
+  const field = error.errors[0].path;
+  console.error('Error de restricción de unicidad:', field);
+  if (field === 'email') {
+    return res.status(400).send('El email ya está en uso.');
+  } else {
+    return res.status(400).send(`El campo ${field} ya está en uso.`);
   }
+}
+// Respuesta de error
+return res.status(500).send(error.message);
+}
 }
 
 async function getAdminsByHospital(req, res) {
