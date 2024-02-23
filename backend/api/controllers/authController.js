@@ -225,6 +225,22 @@ async function getAdminsByHospital(req, res) {
   }
 }
 
+const sendActivationEmail = async (to, name) => {
+  const mailOptions = {
+    from: 'info@alzados.org', // Reemplaza con tu correo
+    to: to,
+    subject: 'Cuenta Activada',
+    text: `Hola ${name},\n\nTu cuenta ha sido activada y ya puedes iniciar sesión.\n\nSaludos,\nEl Equipo de Soporte`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Correo de activación enviado a:', to);
+  } catch (error) {
+    console.error('Error al enviar el correo de activación:', error);
+  }
+};
+
 async function updateAdmin(req, res) {
   try {
     const { id } = req.params;
@@ -239,6 +255,7 @@ async function updateAdmin(req, res) {
     }
 
     let isPasswordUpdated = false;
+    let wasActiveUpdated = admin.isActive !== isActive;
 
     if (newPassword && newPassword.trim()) {
       const currentHashedPassword = admin.password;
@@ -261,6 +278,10 @@ async function updateAdmin(req, res) {
     admin.isActive = isActive;
 
     await admin.save();
+
+    if (wasActiveUpdated && isActive === true) {
+      await sendActivationEmail(email, name);
+    }
 
     const updatedAdmin = admin.toJSON();
     delete updatedAdmin.password;
