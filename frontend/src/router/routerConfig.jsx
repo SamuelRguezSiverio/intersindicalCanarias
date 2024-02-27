@@ -1,25 +1,37 @@
+// Importaciones necesarias
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from '../App';
-
 import Auth from '../pages/Auth/Auth';
 import Home from '../pages/Home/Home';
-import Resource from '../pages/Resource/Resource';
 import Admin from '../pages/Admin/Admin';
-import Profile
- from '../components/Profile/Profile';
-// Función actualizada para comprobar la autenticación y si el usuario es administrador
+import Profile from '../components/Profile/Profile';
+import Estatutaria from '../components/Estatutaria/Estatutaria';
+import Laboral from '../components/Laboral/Laboral';
+import TestExamen from '../components/TestExamen/TestExamen';
+
+// Función para comprobar la autenticación
 const checkAuth = () => {
   const token = localStorage.getItem('token');
-  // Cambia el valor de isAdmin a booleano
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
   return { token, isAdmin };
 };
 
-// Router actualizado con la nueva lógica de autenticación
+// Función para importar dinámicamente las preguntas basadas en la categoría
+const importarPreguntas = async (categoria) => {
+  try {
+    const modulo = await import(`../questionsData/laboral/${categoria}.js`);
+    return modulo.default;
+  } catch (error) {
+    console.error('Error al importar las preguntas:', error);
+    return []; // Retorna un array vacío si hay un error
+  }
+};
+
+// Configuración del router
 const appRouter = createBrowserRouter([
   {
     path: '/',
-    element: <Auth />
+    element: <Auth />,
   },
   {
     path: '/',
@@ -32,8 +44,8 @@ const appRouter = createBrowserRouter([
       return null;
     },
     children: [
-      { 
-        path: '/home', 
+      {
+        path: '/home',
         element: <Home />,
         loader: () => {
           const { token } = checkAuth();
@@ -41,37 +53,45 @@ const appRouter = createBrowserRouter([
             return redirect('/');
           }
           return null;
-        }
+        },
       },
-      { 
-        path: '/admin', 
+      {
+        path: '/admin',
         element: <Admin />,
         loader: () => {
           const { token, isAdmin } = checkAuth();
-          // Comprueba si isAdmin es true
           if (!token || !isAdmin) {
             return redirect('/');
           }
           return null;
-        }
+        },
       },
       {
-        path: 'profile',
-        element: <Profile />
+        path: '/profile',
+        element: <Profile />,
       },
-      { 
-        path: '/resource/:resourceName', 
-        element: <Resource />,
-        loader: () => {
+      {
+        path: '/estatutaria',
+        element: <Estatutaria />,
+      },
+      {
+        path: '/laboral',
+        element: <Laboral />,
+      },
+      {
+        path: '/laboral/:categoria',
+        element: <TestExamen />,
+        loader: async ({ params }) => {
           const { token } = checkAuth();
           if (!token) {
             return redirect('/');
           }
-          return null;
-        }
-      }
-    ]
-  }
+          const preguntas = await importarPreguntas(params.categoria);
+          return { preguntas };
+        },
+      },
+    ],
+  },
 ]);
 
 export default appRouter;

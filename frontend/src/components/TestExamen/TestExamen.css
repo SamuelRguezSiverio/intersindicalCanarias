@@ -1,0 +1,54 @@
+/* TestExamen.css */
+.test-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 100%;
+  margin-top: 150px;
+  background-color: white; /* Fondo blanco para el contenedor */
+}
+
+.test-wrapper {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-timer {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333; /* Color neutro para el temporizador */
+}
+
+.test-question {
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+}
+
+.test-button {
+  background-color: #f7f7f7; /* Fondo neutro para los botones */
+  border: 1px solid #ccc; /* Borde neutro para los botones */
+  color: #333; /* Texto neutro para los botones */
+  padding: 10px 15px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.test-button:hover {
+  background-color: #e7e7e7; /* Efecto hover para los botones */
+}
+
+.test-button-correct {
+  background-color: green; /* Fondo verde para la respuesta correcta */
+  color: white;
+}
+
+.test-button-incorrect {
+  background-color: red; /* Fondo rojo para la respuesta incorrecta */
+  color: white;
+}
