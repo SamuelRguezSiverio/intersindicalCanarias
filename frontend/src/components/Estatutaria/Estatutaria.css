@@ -1,0 +1,94 @@
+.estatutaria-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  background-color: white;
+  border: 2px solid #4e7b35; /* Borde verde para coincidir con los botones */
+  color: #4e7b35; /* Texto verde */
+  padding: 1rem 2rem; /* Padding similar al de los botones */
+  margin: 0.5rem; /* Margen para separar del resto de elementos */
+  font-size: 1.25rem; /* Tamaño de fuente similar al de los botones */
+  border-radius: 5px; /* Bordes redondeados como los botones */
+  transition: all 0.3s; /* Transición suave para efectos hover */
+  outline: none; /* Elimina el contorno al enfocar */
+  width: 80%; /* Ancho similar al de los botones */
+  max-width: 500px; /* Máximo ancho posible */
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+  min-width: 200px;
+}
+
+.search-input:hover,
+.search-input:focus {
+  color: white;
+  border-color: #145214; /* Cambia el color del borde al pasar el cursor o enfocar */
+  background-color: #4e7b35; /* Cambia el color de fondo al pasar el cursor o enfocar */
+}
+
+/* Estilos para el placeholder con prefijos específicos del navegador en estados hover y focus */
+.search-input:hover::-webkit-input-placeholder,
+.search-input:focus::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: white;
+}
+.search-input:hover::-moz-placeholder,
+.search-input:focus::-moz-placeholder {
+  /* Firefox 19+ */
+  color: white;
+  opacity: 1; /* Firefox reduce la opacidad por defecto */
+}
+.search-input:hover:-ms-input-placeholder,
+.search-input:focus:-ms-input-placeholder {
+  /* IE 10+ */
+  color: white;
+}
+.search-input:hover:-moz-placeholder,
+.search-input:focus:-moz-placeholder {
+  /* Firefox 18- */
+  color: white;
+}
+
+.categories-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto; /* Permite el desplazamiento vertical si el contenido es más alto que el contenedor */
+  max-height: 70vh; /* Establece una altura máxima para el contenedor */
+  width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+}
+
+.animated-button {
+  background-color: white;
+  border: none;
+  color: #4e7b35;
+  padding: 1rem 2rem;
+  margin: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: 200px;
+}
+
+.animated-button:hover {
+  background-color: #4e7b35;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .categories-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .animated-button {
+    width: 30%;
+    margin: 10px;
+  }
+}
