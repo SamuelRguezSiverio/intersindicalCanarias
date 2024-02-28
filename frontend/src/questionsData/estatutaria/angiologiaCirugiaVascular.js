@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Señala la respuesta correcta en relación al concepto de isquemia aguda de las extremidades.",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

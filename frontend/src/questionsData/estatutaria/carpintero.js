@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál de los siguientes elementos se utiliza para clasificar las maderas según su origen?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

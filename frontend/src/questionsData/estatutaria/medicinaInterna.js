@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Entre los objetivos específicos del Plan de Uso Responsable de Medicamentos para el paciente Polimedicado\nestán (señale la opción FALSA ) :",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

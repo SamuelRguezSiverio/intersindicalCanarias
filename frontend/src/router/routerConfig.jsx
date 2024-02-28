@@ -8,6 +8,7 @@ import Profile from '../components/Profile/Profile';
 import Estatutaria from '../components/Estatutaria/Estatutaria';
 import Laboral from '../components/Laboral/Laboral';
 import TestExamen from '../components/TestExamen/TestExamen';
+import CategoryCard from '../components/CategoryCard/CategoryCard'; // Asegúrate de importar CategoryCard
 
 // Función para comprobar la autenticación
 const checkAuth = () => {
@@ -77,6 +78,18 @@ const appRouter = createBrowserRouter([
       {
         path: '/laboral',
         element: <Laboral />,
+      },
+      {
+        path: '/laboral/categoria/:categoria',
+        element: <CategoryCard />,
+        loader: async ({ params }) => {
+          const { token } = checkAuth();
+          if (!token) {
+            return redirect('/');
+          }
+          // Aquí puedes cargar datos adicionales si es necesario
+          return { categoria: params.categoria };
+        },
       },
       {
         path: '/laboral/:categoria',

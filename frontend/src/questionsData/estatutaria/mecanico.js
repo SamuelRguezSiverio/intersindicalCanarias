@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Qué diámetro de electrodo es adecuado para soldar una pletina de 3 mm de acero suave F-112?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

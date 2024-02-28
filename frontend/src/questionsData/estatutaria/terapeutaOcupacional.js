@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál de las siguientes leyes define lo que es \"acoso sexual\"?",
@@ -6480,3 +6480,4 @@ export default [
     ]
   }
 ];
+export default preguntas

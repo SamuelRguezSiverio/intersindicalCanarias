@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Para un paciente adulto que consume una dieta normal, ¿cual de las siguientes es la fuente de energía con\nmayor densidad calórica?",
@@ -7201,3 +7201,4 @@ export default [
     ]
   }
 ];
+export default preguntas

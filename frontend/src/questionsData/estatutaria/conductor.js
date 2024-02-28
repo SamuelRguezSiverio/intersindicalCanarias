@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Qué clase de licencia se necesita para conducir motocicletas de cualquier cilindrada?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

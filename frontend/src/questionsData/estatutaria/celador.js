@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Seleccione la respuesta que no corresponde con los requisitos que debemos tener en cuenta a la hora de\nescuchar:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

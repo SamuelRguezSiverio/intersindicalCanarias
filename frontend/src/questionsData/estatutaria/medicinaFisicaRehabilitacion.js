@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Señalar la opción verdadera, con relación al concepto de \"Deficiencia\" según la última clasificación de la CIF\n(Clasificación Internacional de Funcionamiento, de la Discapacidad y de la Salud):",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

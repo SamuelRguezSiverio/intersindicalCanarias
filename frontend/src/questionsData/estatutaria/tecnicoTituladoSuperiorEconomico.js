@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "En el art. 43 de la Constitución Española se dispone:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

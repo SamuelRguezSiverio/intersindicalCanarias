@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Qué artículo de la Constitución reconoce expresamente el derecho de todos los ciudadanos a la protección de la\nsalud:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

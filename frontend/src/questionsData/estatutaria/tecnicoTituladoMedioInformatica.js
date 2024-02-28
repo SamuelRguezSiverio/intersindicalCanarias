@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "En el contexto de PMBOX, ¿cuál de las siguientes opciones es VERDADERA respecto al Acta de Constitución\ndel Proyecto?",
@@ -6480,3 +6480,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Según la Orden de 28 de febrero de 2005, por la que se aprueba la\nCarta de los Derechos y de los Deberes de los Pacientes y Usuarios\nSanitarios, señala cuál es la enumeración de derechos correcta:",
@@ -7198,3 +7198,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿ Aparato destinado a medir intensidades. Se conecta en serie con la carga que se pretende medir ?.",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

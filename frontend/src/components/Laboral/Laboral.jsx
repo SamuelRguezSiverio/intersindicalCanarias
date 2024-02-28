@@ -1,7 +1,7 @@
 // Laboral.js
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import './Laboral.css'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './Laboral.css';
 
 const Laboral = () => {
   const categoriasLaborales = [
@@ -11,16 +11,29 @@ const Laboral = () => {
     'auxiliarEnfermeria',
     'enfermera',
     'limpiador',
-  ]
+  ];
 
-  const [busqueda, setBusqueda] = useState('')
+  const [busqueda, setBusqueda] = useState('');
 
   const categoriasFiltradas =
     busqueda.length === 0
       ? categoriasLaborales
       : categoriasLaborales.filter((categoria) =>
           categoria.toLowerCase().includes(busqueda.toLowerCase())
-        )
+        );
+
+  // Función para formatear el nombre de la categoría para la visualización
+  const formatearNombreCategoria = (categoria) => {
+    const formatos = {
+      'adjuntoCardiologia': 'Adjunto/a Cardiología',
+      'adjuntoGeriatria': 'Adjunto/a Geriatría',
+      'auxiliarAdministrativoFuncionAdministrativa': 'Auxiliar Administrativo Función Administrativa',
+      'auxiliarEnfermeria': 'Auxiliar Enfermería',
+      'enfermera': 'Enfermero/a',
+      'limpiador': 'Limpiador/a',
+    };
+    return formatos[categoria] || categoria;
+  };
 
   return (
     <div className="laboral-container">
@@ -37,15 +50,15 @@ const Laboral = () => {
         {categoriasFiltradas.map((categoria, index) => (
           <Link
             key={index}
-            to={`/laboral/${categoria}`}
+            to={`/laboral/categoria/${categoria}`}
             className="animated-button"
           >
-            {categoria.replace(/([A-Z])/g, ' $1').trim()}
+            {formatearNombreCategoria(categoria)}
           </Link>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Laboral
+export default Laboral;

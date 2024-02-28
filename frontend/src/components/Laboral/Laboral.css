@@ -9,8 +9,8 @@
 
 .search-input {
   background-color: white;
-  border: 2px solid #0f9b0f; /* Borde verde para coincidir con los botones */
-  color: #0f9b0f; /* Texto verde */
+  border: 2px solid #4e7b35; /* Borde verde para coincidir con los botones */
+  color: #4e7b35; /* Texto verde */
   padding: 1rem 2rem; /* Padding similar al de los botones */
   margin: 0.5rem; /* Margen para separar del resto de elementos */
   font-size: 1.25rem; /* Tamaño de fuente similar al de los botones */
@@ -27,7 +27,7 @@
 .search-input:focus {
   color: white;
   border-color: #145214; /* Cambia el color del borde al pasar el cursor o enfocar */
-  background-color: #0f9b0f; /* Cambia el color de fondo al pasar el cursor o enfocar */
+  background-color: #4e7b35; /* Cambia el color de fondo al pasar el cursor o enfocar */
 }
 
 /* Estilos para el placeholder con prefijos específicos del navegador en estados hover y focus */
@@ -62,7 +62,7 @@
 .animated-button {
   background-color: white;
   border: none;
-  color: #0f9b0f;
+  color: #4e7b35;
   padding: 1rem 2rem;
   margin: 0.5rem;
   font-size: 1.25rem;
@@ -71,12 +71,11 @@
   transition: background-color 0.3s, color 0.3s;
   border-radius: 5px;
   cursor: pointer;
-  text-transform: capitalize;
   min-width: 200px;
 }
 
 .animated-button:hover {
-  background-color: #0f9b0f;
+  background-color: #4e7b35;
   color: white;
 }
 

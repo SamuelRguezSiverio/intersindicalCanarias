@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Muchos de los trabajos se realizan en viviendas habitadas y con mobiliario, ¿qué es lo primero que debemos\nhacer?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

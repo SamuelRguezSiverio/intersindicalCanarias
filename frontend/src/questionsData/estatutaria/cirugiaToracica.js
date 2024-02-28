@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuántos tipos de certificado médico oficial existen?",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

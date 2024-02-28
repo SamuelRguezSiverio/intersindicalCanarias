@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál es la herramienta principal utilizada para la ejecución de enfoscados, revocos, guarnecidos y enlucidos?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

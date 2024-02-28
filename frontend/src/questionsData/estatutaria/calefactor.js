@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Se define la \"presión de prueba PT\" como:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

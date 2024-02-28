@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Entre las razones actuales que provocan cambios en la percepción de la limpieza como un tema fundamental,\n¿cuál de las siguientes destaca más?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

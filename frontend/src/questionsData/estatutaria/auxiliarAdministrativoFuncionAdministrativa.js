@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "En relación al derecho a la protección frente a los riesgos laborales recogido en la Ley 31/1995, de 8 de\nnoviembre:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

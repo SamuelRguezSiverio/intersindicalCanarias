@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "En la valoración funcional del endometrio, el primer signo morfológico de actividad secretora de las glándulas\nendometriales, es:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La RPG es :",
@@ -6480,3 +6480,4 @@ export default [
     ]
   }
 ];
+export default preguntas

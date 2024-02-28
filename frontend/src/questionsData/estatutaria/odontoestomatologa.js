@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál es el objeto de la Ley 44/2003, de 21 de noviembre, de ordenación de las profesiones sanitarias?:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

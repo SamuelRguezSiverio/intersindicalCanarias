@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Qué porcentaje aproximado de pacientes transfundidos puede experimentar alguna reacción transfusional?",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

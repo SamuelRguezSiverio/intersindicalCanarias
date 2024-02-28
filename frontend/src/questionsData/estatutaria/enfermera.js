@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La metodología enfermera es un proceso tan común como el que empleamos para tomar cualquiera de las\nmúltiples decisiones que adoptamos cotidianamente los seres humanos. Según R. Alfaro, que nos habla sobre el\nmétodo de solución de problemas, éste incluye : seleccione la opción CORRECTA",
@@ -6480,3 +6480,4 @@ export default [
     ]
   }
 ];
+export default preguntas

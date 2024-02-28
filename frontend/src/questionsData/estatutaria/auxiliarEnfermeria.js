@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál es la Ley de Prevención de Riesgos Laborales?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

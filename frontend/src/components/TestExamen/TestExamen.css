@@ -5,8 +5,8 @@
   align-items: center;
   width: 500px;
   height: 100%;
-  margin-top: 150px;
   background-color: white; /* Fondo blanco para el contenedor */
+  border-radius: 5px;
 }
 
 .test-wrapper {
@@ -18,7 +18,8 @@
 
 .test-timer {
   margin-bottom: 20px;
-  font-size: 1.5rem;
+  font-size: 1rem;
+  text-align: end;
   color: #333; /* Color neutro para el temporizador */
 }
 
@@ -39,16 +40,69 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.test-button:hover {
-  background-color: #e7e7e7; /* Efecto hover para los botones */
-}
-
 .test-button-correct {
-  background-color: green; /* Fondo verde para la respuesta correcta */
+  background-color: green;
   color: white;
 }
 
 .test-button-incorrect {
-  background-color: red; /* Fondo rojo para la respuesta incorrecta */
+  background-color: red;
   color: white;
+}
+
+.test-correct-answer {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* TestExamen.css */
+.test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.test-reiniciar-btn {
+  padding: 5px 10px;
+  margin-right: 10px; /* Ajusta según sea necesario */
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.test-reiniciar-btn:hover {
+  background-color: #c82333;
+}
+
+/* TestExamen.css */
+.test-progreso {
+  font-weight: bold;
+  margin-right: auto; /* Asegura que el progreso esté a la izquierda */
+}
+
+
+.nextQuestion {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #689c4c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.nextQuestion:hover {
+  background-color: #4e7b35;
+}
+
+.nextQuestion:disabled {
+  background-color: #a9b8a9; /* Color más claro para el estado deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor para indicar que el botón está deshabilitado */
+  color: #c7d1c7; /* Color de texto más claro para el estado deshabilitado */
 }

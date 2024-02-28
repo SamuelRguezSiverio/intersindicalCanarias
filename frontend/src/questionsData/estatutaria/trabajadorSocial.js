@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La Constitución Española de 1978, debida a una iniciativa parlamentaria, fue elaborada y aprobada por las\nCortes formadas como resultado de las Elecciones Generales del 15 de junio de 1977. De las siguientes fechas,\nseñala la que corresponde con la publicación del citado texto en el Boletín Oficial del Estado.",
@@ -6480,3 +6480,4 @@ export default [
     ]
   }
 ];
+export default preguntas

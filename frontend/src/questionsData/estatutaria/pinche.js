@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Las sustancias que ingerimos para obtener energía, regular el metabolismo y mantener las funciones vitales son:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Si el grupo sanguíneo del padre es A y el de la madre es B, el grupo del hijo puede ser:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

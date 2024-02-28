@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La Ley de Ordenación de las profesiones Sanitaria es la:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

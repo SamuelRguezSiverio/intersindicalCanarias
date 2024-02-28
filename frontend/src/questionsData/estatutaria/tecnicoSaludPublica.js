@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Quiénes deberán de informar a los usuarios de los servicios del sistema sanitario público, o vinculados a él, de\nsus derechos y deberes?:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

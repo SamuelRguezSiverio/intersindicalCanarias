@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "De conformidad con el artículo 50 de la Ley Orgánica 1/2018, de 5 de noviembre, de reforma del Estatuto de\nAutonomía de Canarias, corresponde al Gobierno de Canarias, (señale la afirmación falsa):",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

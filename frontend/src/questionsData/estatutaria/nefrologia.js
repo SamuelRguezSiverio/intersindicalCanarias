@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Los pronefros se originan a principios de:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "De conformidad con el decreto 13/2006, de 8 de febrero, por el que se regulan las manifestaciones anticipadas\nde voluntad en el ámbito sanitario y la creación de su correspondiente Registro, ¿Cuál de las siguientes\nafirmaciones es incorrecta?",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La evaluación de resultados de los programas de salud:",
@@ -7195,3 +7195,4 @@ export default [
     ]
   }
 ];
+export default preguntas

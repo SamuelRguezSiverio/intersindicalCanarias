@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     id: 1,
     question:
@@ -3811,3 +3811,4 @@ export default [
     incorrect_answers: ['39', '42', '40'],
   },
 ]
+export default preguntas

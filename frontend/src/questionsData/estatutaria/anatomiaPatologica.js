@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "La alteración nuclear de la célula caracterizada por condensación, aumento de la basofilia y retracción nuclear se\ndenomina:",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas

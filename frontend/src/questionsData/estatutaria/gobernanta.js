@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "¿Cuál es el propósito principal de la preparación de alimentos en un comedor?",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

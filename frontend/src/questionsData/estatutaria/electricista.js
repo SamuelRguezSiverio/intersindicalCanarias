@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Pregunta 1 La ley de Ohm es una expresión matemática que relaciona:",
@@ -3600,3 +3600,4 @@ export default [
     ]
   }
 ];
+export default preguntas

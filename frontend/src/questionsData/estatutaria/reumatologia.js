@@ -1,4 +1,4 @@
-export default [
+const preguntas = [
   {
     "id": "1",
     "question": "Según el Plan de Salud de Canarias 2016-2017 ¿Qué factores constituyen la prioridad y principal amenaza para\nla situación de la salud de la población canaria?",
@@ -7200,3 +7200,4 @@ export default [
     ]
   }
 ];
+export default preguntas
