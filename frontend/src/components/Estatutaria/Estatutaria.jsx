@@ -5,7 +5,7 @@ import './Estatutaria.css';
 
 const Estatutaria = () => {
   const categoriasLaborales = [
-    "albañil",
+    "albanil",
     "alergologia",
     "analisisClinicos",
     "anatomiaPatologica",
@@ -110,7 +110,7 @@ const Estatutaria = () => {
   // Función para formatear el nombre de la categoría para la visualización
   const formatearNombreCategoria = (categoria) => {
 const formatos = {
-  "albañil": "Albañil",
+  "albanil": "Albañil",
   "alergologia": "Alergología",
   "analisisClinicos": "Análisis Clínicos",
   "anatomiaPatologica": "Anatomía Patológica",

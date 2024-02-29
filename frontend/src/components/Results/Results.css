@@ -1,0 +1,76 @@
+/* Results.css */
+.results-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 100%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.results-wrapper {
+  text-align: center;
+  padding: 20px;
+}
+
+.results-header {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.results-stats {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.results-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #689c4c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.results-button:hover {
+  background-color: #4e7b35;
+}
+
+.bodyText {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.percentText {
+  font-weight: 900; /* font-black */
+  background-image: linear-gradient(
+    to right,
+    #689c4c,
+    #497432
+  ); /* from-purple-500 to-pink-500 */
+  -webkit-background-clip: text; /* bg-clip-text */
+  color: transparent; /* text-transparent */
+  font-size: 4.75rem; /* text-6xl */
+  margin: 5px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; /* animate-pulse */
+}
+
+/* Keyframes for the pulse animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
