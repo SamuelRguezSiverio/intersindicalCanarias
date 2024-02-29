@@ -1,10 +1,10 @@
-// TestExamen.js
-import React, { useState, useEffect } from 'react'
+// TestExamenEst.js
+import React, { useState, useEffect, useRef } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import './TestExamen.css'
 
-// Función para mezclar las preguntas
-const mezclarPreguntas = (array) => {
+// Función para mezclar elementos de un array
+const mezclarElementos = (array) => {
   let currentIndex = array.length,
     temporaryValue,
     randomIndex
@@ -29,8 +29,9 @@ const TestExamen = () => {
   const [preguntasMezcladas, setPreguntasMezcladas] = useState([])
   const [indiceActual, setIndiceActual] = useState(0)
   const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null)
-  const [temporizador, setTemporizador] = useState(null)
   const [finalizado, setFinalizado] = useState(false)
+  const [aciertos, setAciertos] = useState(0)
+  const temporizadorRef = useRef(null)
   const navigate = useNavigate()
 
   // Configuración basada en el grupo de la categoría
@@ -42,39 +43,48 @@ const TestExamen = () => {
 
   // Establecer configuración inicial basada en el grupo de la categoría
   useEffect(() => {
-    if (preguntas && preguntas.length > 0) {
+    if (preguntas && preguntas.length > 0 && temporizadorRef.current === null) {
       // Asumimos que todas las preguntas tienen el mismo grupo
       const grupoCategoria = preguntas[0].group
       const { maxPreguntas, tiempoMax } =
         configuracionExamen[grupoCategoria] || configuracionExamen['default']
+
+      // Mezcla las preguntas y luego mezcla las opciones de cada pregunta
+      const preguntasConOpcionesMezcladas = preguntas.map((pregunta) => {
+        const opcionesMezcladas = mezclarElementos([
+          pregunta.correct_answer,
+          ...pregunta.incorrect_answers,
+        ])
+        return { ...pregunta, opciones: opcionesMezcladas }
+      })
+
       setPreguntasMezcladas(
-        mezclarPreguntas([...preguntas]).slice(0, maxPreguntas)
+        mezclarElementos(preguntasConOpcionesMezcladas).slice(0, maxPreguntas)
       )
-      // Solo establece el temporizador si aún no se ha establecido
-      if (temporizador === null) {
-        setTemporizador(tiempoMax * 60) // Convertir minutos a segundos
-      }
+
+      // Establece el temporizador inicial
+      temporizadorRef.current = tiempoMax * 60 // Convertir minutos a segundos
     }
-    // Asegúrate de que 'configuracionExamen' y 'temporizador' no cambien en cada renderización,
-    // de lo contrario, crea una referencia constante fuera del componente o usa useMemo.
-  }, [preguntas])
+  }, [preguntas, configuracionExamen])
 
   useEffect(() => {
-    if (!finalizado) {
-      const timer = setTimeout(() => {
-        if (temporizador > 0) {
-          setTemporizador(temporizador - 1)
-        } else {
-          setFinalizado(true)
-        }
+    let timer
+    if (!finalizado && temporizadorRef.current > 0) {
+      timer = setTimeout(() => {
+        temporizadorRef.current -= 1
       }, 1000)
-
-      return () => clearTimeout(timer)
+    } else if (temporizadorRef.current === 0) {
+      setFinalizado(true)
     }
-  }, [temporizador, finalizado])
+
+    return () => clearTimeout(timer)
+  }, [temporizadorRef.current, finalizado])
 
   const manejarRespuesta = (respuesta) => {
     setRespuestaSeleccionada(respuesta)
+    if (respuesta === preguntasMezcladas[indiceActual].correct_answer) {
+      setAciertos(aciertos + 1)
+    }
   }
 
   const siguientePregunta = () => {
@@ -83,7 +93,9 @@ const TestExamen = () => {
       setIndiceActual(siguienteIndice)
       setRespuestaSeleccionada(null)
     } else {
-      setFinalizado(true)
+      navigate('/results', {
+        state: { aciertos, total: preguntasMezcladas.length },
+      })
     }
   }
 
@@ -96,10 +108,6 @@ const TestExamen = () => {
   }
 
   const preguntaActual = preguntasMezcladas[indiceActual]
-  const opciones = [
-    preguntaActual.correct_answer,
-    ...preguntaActual.incorrect_answers,
-  ]
 
   return (
     <div className="test-container">
@@ -116,13 +124,13 @@ const TestExamen = () => {
                 Reiniciar
               </button>
               <p className="test-timer">
-                Tiempo restante: {Math.floor(temporizador / 60)}:
-                {('0' + (temporizador % 60)).slice(-2)}
+                Tiempo restante: {Math.floor(temporizadorRef.current / 60)}:
+                {('0' + (temporizadorRef.current % 60)).slice(-2)}
               </p>
             </div>
             <div>
               <p className="test-question">{preguntaActual.question}</p>
-              {opciones.map((respuesta, index) => (
+              {preguntaActual.opciones.map((respuesta, index) => (
                 <button
                   key={index}
                   onClick={() => manejarRespuesta(respuesta)}

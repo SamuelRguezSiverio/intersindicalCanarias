@@ -1,12 +1,14 @@
-/* TestExamen.css */
 .test-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 500px;
-  height: 100%;
   background-color: white; /* Fondo blanco para el contenedor */
   border-radius: 5px;
+  position: absolute; /* Posicionamiento absoluto */
+  top: 50%; /* Centrado vertical */
+  left: 50%; /* Centrado horizontal */
+  transform: translate(-50%, -50%); /* Ajuste fino del centrado */
 }
 
 .test-wrapper {
@@ -83,7 +85,6 @@
   font-weight: bold;
   margin-right: auto; /* Asegura que el progreso esté a la izquierda */
 }
-
 
 .nextQuestion {
   padding: 10px 20px;

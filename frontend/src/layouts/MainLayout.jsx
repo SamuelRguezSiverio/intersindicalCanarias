@@ -7,16 +7,19 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Box,
+  Container,
 } from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import HomeIcon from '@mui/icons-material/Home';
-import { Box } from '@mui/system'
+import HomeIcon from '@mui/icons-material/Home'
+
 // import cabeceraIMG from '../assets/logo/cabezera-3-climatico.png'
 function MainLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [username, setUsername] = useState('')
   const [isAdmin, setIsAdmin] = useState(false) // Estado para almacenar si el usuario es administrador
+  const [value, setValue] = useState(0) // Estado para la navegación del footer
 
   useEffect(() => {
     // Suponiendo que el nombre de usuario y el estado de administrador se almacenan en localStorage después del inicio de sesión
@@ -39,7 +42,7 @@ function MainLayout() {
   }
 
   function goHome() {
-   navigate('/home')
+    navigate('/home')
   }
 
   function onLogout() {
@@ -53,8 +56,9 @@ function MainLayout() {
   }
 
   return (
-    <AppBar>
-      {/* <img
+    <>
+      <AppBar>
+        {/* <img
         src={cabeceraIMG}
         alt="Cabecero"
         style={{
@@ -69,45 +73,82 @@ function MainLayout() {
         }}
       /> */}
 
-      <Toolbar
-        variant="dense"
+        <Toolbar
+          variant="dense"
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            backgroundColor: '#4e7b35',
+          }}
+        >
+          <Box
+            sx={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center' }}
+          >
+            <IconButton onClick={() => navigate(isAdmin ? '/admin' : '/home')}>
+              <HomeIcon sx={{ color: 'white' }} />
+            </IconButton>
+            <IconButton onClick={openMenu}>
+              <AccountCircleIcon sx={{ color: 'white' }} />
+            </IconButton>
+            <Menu open={isMenuOpen} anchorEl={anchorEl} onClose={closeMenu}>
+              <MenuItem
+                sx={{
+                  '&:hover': { backgroundColor: '#51711a', color: 'white' },
+                }}
+                onClick={() => navigate(isAdmin ? '/admin' : '/home')}
+              >
+                Inicio
+              </MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': { backgroundColor: '#51711a', color: 'white' },
+                }}
+                onClick={() => navigate('/profile')}
+              >
+                Mi perfil
+              </MenuItem>
+              <MenuItem
+                sx={{
+                  '&:hover': { backgroundColor: '#51711a', color: 'white' },
+                }}
+                onClick={onLogout}
+              >
+                Salir
+              </MenuItem>
+            </Menu>
+            <Typography variant="h6">Bienvenido, {username}</Typography>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Container
+        component="footer"
+        style={{ maxWidth: 'none' }}
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
+          width: '100%', // Asegura que el ancho sea del 100%
+          bottom: 0,
+          position: 'fixed',
+          left: 0,
+          right: 0,
           backgroundColor: '#4e7b35',
+          display: 'flex', // Usa flexbox para centrar el contenido
+          justifyContent: 'center', // Centra horizontalmente
+          alignItems: 'center', // Centra verticalmente
+          height: '30px', // Altura fija del footer
         }}
       >
-        <Box sx={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center' }}>
-        <IconButton onClick={goHome}>
-            <HomeIcon sx={{ color: 'white' }} />
-          </IconButton>
-          <IconButton onClick={openMenu}>
-            <AccountCircleIcon sx={{ color: 'white' }} />
-          </IconButton>
-          <Menu open={isMenuOpen} anchorEl={anchorEl} onClose={closeMenu}>
-            <MenuItem
-              sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
-              onClick={() => navigate(isAdmin ? '/admin' : '/home')}
-            >
-              Inicio
-            </MenuItem>
-            <MenuItem
-              sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
-              onClick={() => navigate('/profile')}
-            >
-              Mi perfil
-            </MenuItem>
-            <MenuItem
-              sx={{ '&:hover': { backgroundColor: '#51711a', color: 'white' } }}
-              onClick={onLogout}
-            >
-              Salir
-            </MenuItem>
-          </Menu>
-          <Typography variant="h6">Bienvenido, {username}</Typography>
-        </Box>
-      </Toolbar>
-    </AppBar>
+        <Typography
+          variant="body2"
+          color="white"
+          align="center"
+          sx={{
+            width: '100%', // Asegura que el texto también ocupe el 100% del ancho
+          }}
+        >
+          Intersindical Canaria Salud © {new Date().getFullYear()}. Todos los
+          derechos reservados
+        </Typography>
+      </Container>
+    </>
   )
 }
 

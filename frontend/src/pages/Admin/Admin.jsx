@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getAdminsByHospital, updateAdmin } from '../../services/auth'
 import './Admin.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const Admin = () => {
   const [admins, setAdmins] = useState([])
@@ -46,24 +46,22 @@ const Admin = () => {
   }
 
   const filteredAdmins = admins.filter((admin) =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase())
+    admin.nif.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
-    <div>
-
-
-<div className="search-box">
-      <button className="btn-search">
-        <FontAwesomeIcon icon={faSearch} />
-      </button>
-      <input
-        type="text"
-        className="input-search"
-        placeholder="Buscador de usuarios..."
-        onChange={handleSearchChange}
-      />
-    </div>
+    <div className="container">
+      <div className="search-box">
+        <button className="btn-search">
+          <FontAwesomeIcon icon={faSearch} />
+        </button>
+        <input
+          type="text"
+          className="input-search"
+          placeholder="Buscador por NIF de usuarios..."
+          onChange={handleSearchChange}
+        />
+      </div>
 
       <div className="table-responsive">
         <table className="table-admins">
@@ -76,7 +74,7 @@ const Admin = () => {
               <th>Móvil</th>
               <th>Categoría</th>
               <th>Hospital</th>
-              <th>Es Admin</th>
+              {/* <th>Es Admin</th> */}
               <th>Está Activo</th>
               <th>Acciones</th>
             </tr>
@@ -84,7 +82,7 @@ const Admin = () => {
           <tbody>
             {filteredAdmins.map((admin) => (
               <tr key={admin.id}>
-                <td>
+                <td data-label="Nombre">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -96,7 +94,7 @@ const Admin = () => {
                     admin.name
                   )}
                 </td>
-                <td>
+                <td data-label="Apellidos">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -108,7 +106,7 @@ const Admin = () => {
                     admin.surName
                   )}
                 </td>
-                <td>
+                <td data-label="NIF">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -120,7 +118,7 @@ const Admin = () => {
                     admin.nif
                   )}
                 </td>
-                <td>
+                <td data-label="Email">
                   {editAdminId === admin.id ? (
                     <input
                       type="email"
@@ -132,7 +130,7 @@ const Admin = () => {
                     admin.email
                   )}
                 </td>
-                <td>
+                <td data-label="Móvil">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -144,7 +142,7 @@ const Admin = () => {
                     admin.mobile
                   )}
                 </td>
-                <td>
+                <td data-label="Categoría">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -156,7 +154,7 @@ const Admin = () => {
                     admin.category
                   )}
                 </td>
-                <td>
+                <td data-label="Hospital">
                   {editAdminId === admin.id ? (
                     <input
                       type="text"
@@ -168,7 +166,7 @@ const Admin = () => {
                     admin.hospital
                   )}
                 </td>
-                <td>
+                {/* <td>
                   {editAdminId === admin.id ? (
                     <input
                       type="checkbox"
@@ -185,8 +183,8 @@ const Admin = () => {
                   ) : (
                     'No'
                   )}
-                </td>
-                <td>
+                </td> */}
+                <td data-label="Está Activo">
                   {editAdminId === admin.id ? (
                     <input
                       type="checkbox"
@@ -204,7 +202,7 @@ const Admin = () => {
                     'No'
                   )}
                 </td>
-                <td>
+                <td data-label="Acciones">
                   {editAdminId === admin.id ? (
                     <>
                       <button

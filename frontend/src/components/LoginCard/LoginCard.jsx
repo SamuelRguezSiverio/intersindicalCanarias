@@ -23,7 +23,7 @@ function Copyright(props) {
       {...props}
     >
       {'Intersindical Canaria Salud © '}
-      Todos los derechos reservados {new Date().getFullYear()}
+      {new Date().getFullYear()}. Todos los derechos reservados
       {'.'}
     </Typography>
   )

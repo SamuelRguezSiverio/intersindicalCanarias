@@ -1,109 +1,109 @@
-/* TestExamen.css */
 .test-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
-    height: 100%;
-    background-color: white; /* Fondo blanco para el contenedor */
-    border-radius: 5px;
-  }
-  
-  .test-wrapper {
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .test-timer {
-    margin-bottom: 20px;
-    font-size: 1rem;
-    text-align: end;
-    color: #333; /* Color neutro para el temporizador */
-  }
-  
-  .test-question {
-    margin-bottom: 20px;
-    font-size: 1.25rem;
-  }
-  
-  .test-button {
-    background-color: #f7f7f7; /* Fondo neutro para los botones */
-    border: 1px solid #ccc; /* Borde neutro para los botones */
-    color: #333; /* Texto neutro para los botones */
-    padding: 10px 15px;
-    margin: 5px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .test-button-correct {
-    background-color: green;
-    color: white;
-  }
-  
-  .test-button-incorrect {
-    background-color: red;
-    color: white;
-  }
-  
-  .test-correct-answer {
-    color: green;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  
-  /* TestExamen.css */
-  .test-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: bold;
-  }
-  
-  .test-reiniciar-btn {
-    padding: 5px 10px;
-    margin-right: 10px; /* Ajusta según sea necesario */
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .test-reiniciar-btn:hover {
-    background-color: #c82333;
-  }
-  
-  /* TestExamen.css */
-  .test-progreso {
-    font-weight: bold;
-    margin-right: auto; /* Asegura que el progreso esté a la izquierda */
-  }
-  
-  
-  .nextQuestion {
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: white;
-    background-color: #689c4c;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 20px;
-  }
-  
-  .nextQuestion:hover {
-    background-color: #4e7b35;
-  }
-  
-  .nextQuestion:disabled {
-    background-color: #a9b8a9; /* Color más claro para el estado deshabilitado */
-    cursor: not-allowed; /* Cambia el cursor para indicar que el botón está deshabilitado */
-    color: #c7d1c7; /* Color de texto más claro para el estado deshabilitado */
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  background-color: white; /* Fondo blanco para el contenedor */
+  border-radius: 5px;
+  position: absolute; /* Posicionamiento absoluto */
+  top: 50%; /* Centrado vertical */
+  left: 50%; /* Centrado horizontal */
+  transform: translate(-50%, -50%); /* Ajuste fino del centrado */
+}
+
+.test-wrapper {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-timer {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  text-align: end;
+  color: #333; /* Color neutro para el temporizador */
+}
+
+.test-question {
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+}
+
+.test-button {
+  background-color: #f7f7f7; /* Fondo neutro para los botones */
+  border: 1px solid #ccc; /* Borde neutro para los botones */
+  color: #333; /* Texto neutro para los botones */
+  padding: 10px 15px;
+  margin: 5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.test-button-correct {
+  background-color: green;
+  color: white;
+}
+
+.test-button-incorrect {
+  background-color: red;
+  color: white;
+}
+
+.test-correct-answer {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* TestExamen.css */
+.test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.test-reiniciar-btn {
+  padding: 5px 10px;
+  margin-right: 10px; /* Ajusta según sea necesario */
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.test-reiniciar-btn:hover {
+  background-color: #c82333;
+}
+
+/* TestExamen.css */
+.test-progreso {
+  font-weight: bold;
+  margin-right: auto; /* Asegura que el progreso esté a la izquierda */
+}
+
+.nextQuestion {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #689c4c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.nextQuestion:hover {
+  background-color: #4e7b35;
+}
+
+.nextQuestion:disabled {
+  background-color: #a9b8a9; /* Color más claro para el estado deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor para indicar que el botón está deshabilitado */
+  color: #c7d1c7; /* Color de texto más claro para el estado deshabilitado */
+}

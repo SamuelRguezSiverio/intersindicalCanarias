@@ -13,7 +13,7 @@ import {
   CardActions,
   Divider,
   InputAdornment,
-  IconButton
+  IconButton,
 } from '@mui/material'
 import { getAdminById, updateAdmin } from '../../services/auth'
 import { styled } from '@mui/material/styles'
@@ -56,7 +56,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
-  const [passwordError, setPasswordError] = useState('');
+  const [passwordError, setPasswordError] = useState('')
   const [isPassVisible, setIsPassVisible] = useState(false)
 
   useEffect(() => {
@@ -82,15 +82,17 @@ const Profile = () => {
     setNewPassword(e.target.value)
   }
   const validatePassword = (password) => {
-    const re = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{8,}$/;
-    return re.test(password);
-  };
+    const re = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{8,}$/
+    return re.test(password)
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setPasswordError(''); // Limpiar errores previos
+    setPasswordError('') // Limpiar errores previos
     if (!validatePassword(newPassword)) {
-      setPasswordError('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula y un número.');
-      return;
+      setPasswordError(
+        'La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula y un número.'
+      )
+      return
     }
     try {
       const updatedData = {
@@ -114,10 +116,12 @@ const Profile = () => {
     <ThemeProvider theme={theme}>
       <Box
         sx={{
-          mt: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh'
+          
         }}
       >
         {!isEditing ? (
@@ -177,7 +181,6 @@ const Profile = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-
               flexDirection: 'column',
               m: 5,
               p: 5,
@@ -251,19 +254,19 @@ const Profile = () => {
               type={isPassVisible ? 'text' : 'password'}
               value={newPassword}
               error={Boolean(passwordError)}
-        helperText={passwordError}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => setIsPassVisible(!isPassVisible)}
-              >
-                {isPassVisible ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
+              helperText={passwordError}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setIsPassVisible(!isPassVisible)}
+                    >
+                      {isPassVisible ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               onChange={handleNewPasswordChange}
             />
             <Button
