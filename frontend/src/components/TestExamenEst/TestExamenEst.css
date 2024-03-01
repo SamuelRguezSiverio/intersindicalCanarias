@@ -16,7 +16,28 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  /* Agrega las siguientes líneas */
+  overflow-y: scroll; /* Siempre muestra la barra de desplazamiento vertical */
+  max-height: calc(100vh - 150px);
 }
+/* Personaliza la barra de desplazamiento para WebKit browsers */
+.test-wrapper::-webkit-scrollbar {
+  width: 10px; /* Ancho de la barra de desplazamiento */
+}
+
+.test-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color de fondo de la pista de la barra de desplazamiento */
+}
+
+.test-wrapper::-webkit-scrollbar-thumb {
+  background: #4e7b35; /* Color de fondo del pulgar de la barra de desplazamiento */
+}
+
+.test-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color de fondo del pulgar de la barra de desplazamiento al pasar el cursor */
+}
+
 
 .test-timer {
   margin-bottom: 20px;

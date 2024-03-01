@@ -19,9 +19,14 @@ const CategoryCard = () => {
       tiempoMax: 90,
       maxPreguntas: 50,
     },
+    auxiliarAlmacen: {tiempoMax: 90, maxPreguntas: 50},
     auxiliarEnfermeria: { tiempoMax: 90, maxPreguntas: 50 },
+    ayudanteCocina: {tiempoMax: 90, maxPreguntas: 50},
+    costureraLavanderaPlanchadora: {tiempoMax: 90, maxPreguntas: 50},
     enfermera: { tiempoMax: 120, maxPreguntas: 90 },
+    lencera: {tiempoMax: 90, maxPreguntas: 50},
     limpiador: { tiempoMax: 90, maxPreguntas: 50 },
+    tecnicoTituladoSuperior: {tiempoMax: 120, maxPreguntas: 100}
   }
 
   // Función para formatear el nombre de la categoría para la visualización
@@ -31,9 +36,14 @@ const CategoryCard = () => {
       adjuntoGeriatria: 'Adjunto/a Geriatría',
       auxiliarAdministrativoFuncionAdministrativa:
         'Auxiliar Administrativo Función Administrativa',
+      auxiliarAlmacen: 'Auxiliar Almacén',
       auxiliarEnfermeria: 'Auxiliar Enfermería',
+      ayudanteCocina: 'Ayudante Cocina',
+      costureraLavanderaPlanchadora: 'Costurera, Lavandera Planchadora',
       enfermera: 'Enfermero/a',
+      lencera: 'Lencero/a',
       limpiador: 'Limpiador/a',
+      tecnicoTituladoSuperior: 'Tecnico/a Titulado Superior',
     }
     return formatos[categoria] || categoria
   }
