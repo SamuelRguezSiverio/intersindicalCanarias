@@ -17,14 +17,16 @@ const Admin = sequelize.define(
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING(191), // Longitud reducida a 191
+      type: DataTypes.STRING(191),
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
-        msg: 'Invalid email format',
+        isEmail: {
+          args: true,
+          msg: 'El formato del email no es válido.' // Mensaje de error personalizado
+        }
       },
-    },
+    },    
     password: {
       type: DataTypes.STRING(191), // Longitud reducida a 191
       allowNull: false,
