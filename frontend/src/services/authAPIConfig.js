@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const authApi = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'https://intersindicalcanarias.onrender.com/api'
 })
 
 export default authApi
