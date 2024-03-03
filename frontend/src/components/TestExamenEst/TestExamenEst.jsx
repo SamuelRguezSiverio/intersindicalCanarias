@@ -1,112 +1,112 @@
-// TestExamenEst.js
-import React, { useState, useEffect, useRef } from 'react'
-import { useLoaderData, useNavigate } from 'react-router-dom'
-import './TestExamenEst.css'
+import React, { useState, useEffect, useRef } from 'react';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import './TestExamenEst.css';
 
 // Función para mezclar elementos de un array
 const mezclarElementos = (array) => {
-  let currentIndex = array.length,
-    temporaryValue,
-    randomIndex
+  let currentIndex = array.length, temporaryValue, randomIndex;
 
   // Mientras queden elementos a mezclar...
   while (0 !== currentIndex) {
     // Seleccionar un elemento sin mezclar...
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex -= 1
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
 
     // E intercambiarlo con el elemento actual
-    temporaryValue = array[currentIndex]
-    array[currentIndex] = array[randomIndex]
-    array[randomIndex] = temporaryValue
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
   }
-  return array
-}
+
+  return array;
+};
 
 const TestExamenEst = () => {
-  const { preguntas } = useLoaderData()
-  const [preguntasMezcladas, setPreguntasMezcladas] = useState([])
-  const [indiceActual, setIndiceActual] = useState(0)
-  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null)
-  const [finalizado, setFinalizado] = useState(false)
-  const [aciertos, setAciertos] = useState(0)
-  const temporizadorRef = useRef(null)
-  const navigate = useNavigate()
+  const { preguntas } = useLoaderData();
+  const [preguntasMezcladas, setPreguntasMezcladas] = useState([]);
+  const [indiceActual, setIndiceActual] = useState(0);
+  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null);
+  const [finalizado, setFinalizado] = useState(false);
+  const [aciertos, setAciertos] = useState(0);
+  const [tiempoRestante, setTiempoRestante] = useState(null);
+  const temporizadorRef = useRef(null);
+  const navigate = useNavigate();
 
   // Configuración basada en el grupo de la categoría
   const configuracionExamen = {
     A1: { maxPreguntas: 100, tiempoMax: 120 },
     A2: { maxPreguntas: 90, tiempoMax: 120 },
     default: { maxPreguntas: 50, tiempoMax: 90 },
-  }
+  };
 
   // Establecer configuración inicial basada en el grupo de la categoría
   useEffect(() => {
     if (preguntas && preguntas.length > 0 && temporizadorRef.current === null) {
-      // Asumimos que todas las preguntas tienen el mismo grupo
-      const grupoCategoria = preguntas[0].group
+      const grupoCategoria = preguntas[0].group;
       const { maxPreguntas, tiempoMax } =
-        configuracionExamen[grupoCategoria] || configuracionExamen['default']
+        configuracionExamen[grupoCategoria] || configuracionExamen['default'];
 
-      // Mezcla las preguntas y luego mezcla las opciones de cada pregunta
       const preguntasConOpcionesMezcladas = preguntas.map((pregunta) => {
         const opcionesMezcladas = mezclarElementos([
           pregunta.correct_answer,
           ...pregunta.incorrect_answers,
-        ])
-        return { ...pregunta, opciones: opcionesMezcladas }
-      })
+        ]);
+        return { ...pregunta, opciones: opcionesMezcladas };
+      });
 
       setPreguntasMezcladas(
         mezclarElementos(preguntasConOpcionesMezcladas).slice(0, maxPreguntas)
-      )
+      );
 
-      // Establece el temporizador inicial
-      temporizadorRef.current = tiempoMax * 60 // Convertir minutos a segundos
+      temporizadorRef.current = tiempoMax * 60; // Convertir minutos a segundos
+      setTiempoRestante(temporizadorRef.current); // Actualizamos el estado para reflejar en el DOM
     }
-  }, [preguntas, configuracionExamen])
+  }, [preguntas, configuracionExamen]);
 
+  // Nuevo useEffect para manejar el temporizador
   useEffect(() => {
-    let timer
-    if (!finalizado && temporizadorRef.current > 0) {
-      timer = setTimeout(() => {
-        temporizadorRef.current -= 1
-      }, 1000)
-    } else if (temporizadorRef.current === 0) {
-      setFinalizado(true)
-    }
+    const tick = () => {
+      temporizadorRef.current -= 1;
+      setTiempoRestante(temporizadorRef.current); // Actualizamos el estado para reflejar en el DOM
+      if (temporizadorRef.current === 0) {
+        setFinalizado(true);
+      }
+    };
 
-    return () => clearTimeout(timer)
-  }, [temporizadorRef.current, finalizado])
+    if (!finalizado && temporizadorRef.current > 0) {
+      const timerId = setInterval(tick, 1000);
+      return () => clearInterval(timerId);
+    }
+  }, [finalizado]);
 
   const manejarRespuesta = (respuesta) => {
-    setRespuestaSeleccionada(respuesta)
+    setRespuestaSeleccionada(respuesta);
     if (respuesta === preguntasMezcladas[indiceActual].correct_answer) {
-      setAciertos(aciertos + 1)
+      setAciertos(aciertos + 1);
     }
-  }
+  };
 
   const siguientePregunta = () => {
-    const siguienteIndice = indiceActual + 1
+    const siguienteIndice = indiceActual + 1;
     if (siguienteIndice < preguntasMezcladas.length) {
-      setIndiceActual(siguienteIndice)
-      setRespuestaSeleccionada(null)
+      setIndiceActual(siguienteIndice);
+      setRespuestaSeleccionada(null);
     } else {
       navigate('/results', {
         state: { aciertos, total: preguntasMezcladas.length },
-      })
+      });
     }
-  }
+  };
 
   const reiniciarExamen = () => {
-    navigate(-1) // Vuelve a la pantalla anterior
-  }
+    navigate(-1); // Vuelve a la pantalla anterior
+  };
 
   if (!preguntasMezcladas || preguntasMezcladas.length === 0) {
-    return <div>Cargando preguntas...</div>
+    return <div>Cargando preguntas...</div>;
   }
 
-  const preguntaActual = preguntasMezcladas[indiceActual]
+  const preguntaActual = preguntasMezcladas[indiceActual];
 
   return (
     <div className="test-container">
@@ -123,8 +123,8 @@ const TestExamenEst = () => {
                 Reiniciar
               </button>
               <p className="test-timer">
-                Tiempo restante: {Math.floor(temporizadorRef.current / 60)}:
-                {('0' + (temporizadorRef.current % 60)).slice(-2)}
+                Tiempo restante: {Math.floor(tiempoRestante / 60)}:
+                {('0' + (tiempoRestante % 60)).slice(-2)}
               </p>
             </div>
             <div>
@@ -159,7 +159,7 @@ const TestExamenEst = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TestExamenEst
+export default TestExamenEst;
