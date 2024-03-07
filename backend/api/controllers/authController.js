@@ -332,7 +332,7 @@ async function forgotPassword(req, res) {
   await user.save();
 
   // Enviar correo electrónico con el token
-  const resetUrl = `https://alzados.org/reset-password/${resetToken}`;
+  const resetUrl = `https://intersindicalcanarias.netlify.app/reset-password/${resetToken}`;
   const message = `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para establecer una nueva contraseña: ${resetUrl}`;
 
   try {
