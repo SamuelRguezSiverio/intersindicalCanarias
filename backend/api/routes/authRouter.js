@@ -7,7 +7,8 @@ const {
   updateAdmin,
   getAdminById,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getResetPasswordToken
 } = require('../controllers/authController')
 
 const { sendEmail } = require('../controllers/emailController');
@@ -19,6 +20,7 @@ router.get('/adminsId/:id', getAdminById)
 router.put('/admins/:id', updateAdmin);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.get('/reset-password/:token', getResetPasswordToken);
 router.post('/send', (req, res) => {
   const { to, subject, text } = req.body;
   sendEmail(to, subject, text);

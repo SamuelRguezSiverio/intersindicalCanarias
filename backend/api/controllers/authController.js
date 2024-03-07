@@ -373,6 +373,35 @@ async function resetPassword(req, res) {
   res.status(200).send('Contraseña actualizada con éxito');
 }
 
+async function getResetPasswordToken(req, res) {
+  const { token } = req.params;
+
+  try {
+    // Buscar al usuario con el token proporcionado y verificar que no haya expirado
+    const user = await Admin.findOne({
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: {
+          [Op.gt]: new Date() // Asegúrate de que el token no haya expirado
+        }
+      }
+    });
+
+    if (!user) {
+      // Si no se encuentra el usuario o el token ha expirado, enviar una respuesta de error
+      return res.status(404).json({ message: 'El enlace de restablecimiento de contraseña es inválido o ha expirado.' });
+    }
+
+    // Si el token es válido, redirigir al usuario a la página de restablecimiento de contraseña en el cliente
+    // Asegúrate de que la URL de redirección sea correcta y coincida con la configuración de tu cliente React
+    res.redirect(`https://${req.headers.host}/reset-password/${token}`);
+  } catch (error) {
+    // Manejar cualquier error que ocurra durante el proceso
+    console.error('Error al obtener el token de restablecimiento de contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor al procesar la solicitud.' });
+  }
+}
+
 module.exports = {
   login,
   signup,
@@ -380,5 +409,6 @@ module.exports = {
   getAdminById,
   updateAdmin,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getResetPasswordToken
 }
