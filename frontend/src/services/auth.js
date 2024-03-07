@@ -103,3 +103,20 @@ export async function resetPassword(token, newPassword) {
     throw error;
   }
 }
+
+export async function verifyResetToken(token) {
+  try {
+    // Enviar una solicitud GET al servidor para verificar la validez del token
+    const response = await authApi.get(`/auth/reset-password/${token}`);
+    
+    if (response.status !== 200) {
+      throw new Error('Token inválido o expirado.');
+    }
+
+    // Si el token es válido, podrías devolver algún dato relevante o simplemente confirmar la validez
+    return response.data;
+  } catch (error) {
+    console.error('Error al verificar el token de restablecimiento:', error);
+    throw error;
+  }
+}

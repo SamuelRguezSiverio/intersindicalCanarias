@@ -19,8 +19,8 @@ router.get('/adminsByHospital', getAdminsByHospital)
 router.get('/adminsId/:id', getAdminById)
 router.put('/admins/:id', updateAdmin);
 router.post('/forgot-password', forgotPassword);
-router.post('/reset-password', resetPassword);
 router.get('/reset-password/:token', getResetPasswordToken);
+router.post('/reset-password', resetPassword);
 router.post('/send', (req, res) => {
   const { to, subject, text } = req.body;
   sendEmail(to, subject, text);
