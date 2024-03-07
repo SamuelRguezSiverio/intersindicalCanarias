@@ -1,9 +1,8 @@
-// ResetPassword.js
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Grid, Paper } from '@mui/material'
-import { useNavigate, useParams } from 'react-router-dom'
-import { styled } from '@mui/material/styles'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Typography, Box, Grid, Paper } from '@mui/material';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resetPassword } from '../../services/auth';
 import { verifyResetToken } from '../../services/auth';
 
@@ -34,18 +33,23 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { token } = useParams(); // Obtiene el token de los parámetros de la URL
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // Obtiene el token del parámetro de consulta
+  const token = searchParams.get('token');
 
   useEffect(() => {
     // Verificar el token al cargar el componente
     const verifyToken = async () => {
-      try {
-        await verifyResetToken(token);
-        // Si el token es válido, puedes continuar con el proceso de restablecimiento
-      } catch (error) {
-        // Si el token no es válido, puedes mostrar un mensaje de error
-        setErrorMessage('El token de restablecimiento de contraseña es inválido o ha expirado.');
+      if (token) {
+        try {
+          await verifyResetToken(token);
+          // Si el token es válido, puedes continuar con el proceso de restablecimiento
+        } catch (error) {
+          // Si el token no es válido, puedes mostrar un mensaje de error
+          setErrorMessage('El token de restablecimiento de contraseña es inválido o ha expirado.');
+        }
       }
     };
 

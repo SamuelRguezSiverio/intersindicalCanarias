@@ -312,6 +312,7 @@ async function getAdminById(req, res) {
 }
 
 
+// Función de backend para manejar el olvido de contraseña
 async function forgotPassword(req, res) {
   const { email } = req.body;
   const user = await Admin.findOne({ where: { email } });
@@ -331,8 +332,8 @@ async function forgotPassword(req, res) {
   user.resetPasswordExpires = expireDate;
   await user.save();
 
-  // Enviar correo electrónico con el token
-  const resetUrl = `https://intersindicalcanarias.netlify.app/reset-password/${resetToken}`;
+  // Enviar correo electrónico con el token como parámetro de consulta
+  const resetUrl = `https://alzados.org/reset-password?token=${resetToken}`;
   const message = `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para establecer una nueva contraseña: ${resetUrl}`;
 
   try {
@@ -342,6 +343,7 @@ async function forgotPassword(req, res) {
     res.status(500).send('Error al enviar el correo de recuperación.');
   }
 }
+
 
 
 // Función para permitir al usuario restablecer su contraseña
