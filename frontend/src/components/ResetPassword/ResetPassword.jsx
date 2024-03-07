@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Grid, Paper } from '@mui/material';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { resetPassword } from '../../services/auth';
-import { verifyResetToken } from '../../services/auth';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -26,35 +25,15 @@ const CssTextField = styled(TextField)({
   },
 })
 
-const theme = createTheme(); // Utiliza el mismo tema que en ForgotPassword
+const theme = createTheme();
 
 export default function ResetPassword() {
+  const [token, setToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  // Obtiene el token del parámetro de consulta
-  const token = searchParams.get('token');
-
-  useEffect(() => {
-    // Verificar el token al cargar el componente
-    const verifyToken = async () => {
-      if (token) {
-        try {
-          await verifyResetToken(token);
-          // Si el token es válido, puedes continuar con el proceso de restablecimiento
-        } catch (error) {
-          // Si el token no es válido, puedes mostrar un mensaje de error
-          setErrorMessage('El token de restablecimiento de contraseña es inválido o ha expirado.');
-        }
-      }
-    };
-
-    verifyToken();
-  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,12 +43,10 @@ export default function ResetPassword() {
     }
     try {
       await resetPassword(token, newPassword);
-      setMessage('Tu contraseña ha sido restablecida con éxito. Serás redirigido en breve.');
-      setTimeout(() => {
-        navigate('/home'); // Redirige al usuario a la página de inicio después de mostrar el mensaje
-      }, 5000); // Espera 5 segundos antes de redirigir
+      setMessage('Tu contraseña ha sido restablecida con éxito. Serás redirigido a la página de inicio de sesión.');
+      navigate('/login');
     } catch (error) {
-      setErrorMessage(error.response.data); // Maneja aquí los errores
+      setErrorMessage('Error al restablecer la contraseña. Asegúrate de que el token sea correcto.');
     }
   };
 
@@ -89,8 +66,8 @@ export default function ResetPassword() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            maxWidth: 400, // Ajusta este valor según tus necesidades
-            width: '100%', // Asegura que el Box ocupe el ancho completo del contenedor Grid
+            maxWidth: 400,
+            width: '100%',
           }}
         >
           <Paper
@@ -100,13 +77,25 @@ export default function ResetPassword() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: '100%', // Asegura que el Paper ocupe el ancho completo del Box
+              width: '100%',
             }}
           >
             <Typography component="h1" variant="h5">
               Restablecer Contraseña
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <CssTextField
+                margin="normal"
+                required
+                fullWidth
+                id="token"
+                label="Token de Restablecimiento"
+                name="token"
+                autoComplete="token"
+                autoFocus
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+              />
               <CssTextField
                 margin="normal"
                 required

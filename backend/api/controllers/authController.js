@@ -312,7 +312,7 @@ async function getAdminById(req, res) {
 }
 
 
-// Función de backend para manejar el olvido de contraseña
+// Función para iniciar el proceso de restablecimiento de contraseña
 async function forgotPassword(req, res) {
   const { email } = req.body;
   const user = await Admin.findOne({ where: { email } });
@@ -332,9 +332,8 @@ async function forgotPassword(req, res) {
   user.resetPasswordExpires = expireDate;
   await user.save();
 
-  // Enviar correo electrónico con el token como parámetro de consulta
-  const resetUrl = `https://alzados.org/reset-password?token=${resetToken}`;
-  const message = `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para establecer una nueva contraseña: ${resetUrl}`;
+  // Enviar correo electrónico con el token en el cuerpo del mensaje
+  const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`;
 
   try {
     await sendEmail(user.email, 'Instrucciones para restablecer la contraseña', message);
@@ -343,6 +342,7 @@ async function forgotPassword(req, res) {
     res.status(500).send('Error al enviar el correo de recuperación.');
   }
 }
+
 
 
 
