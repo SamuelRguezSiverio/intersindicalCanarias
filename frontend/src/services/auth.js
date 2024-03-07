@@ -77,3 +77,29 @@ export async function sendEmail(data) {
     throw error;
   }
 }
+
+export async function forgotPassword(email) {
+  try {
+    const response = await authApi.post('/auth/forgot-password', { email });
+    if (response.status !== 200) {
+      throw new Error('No se pudo procesar la solicitud de recuperación de contraseña.');
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error al solicitar la recuperación de contraseña:', error);
+    throw error;
+  }
+}
+
+export async function resetPassword(token, newPassword) {
+  try {
+    const response = await authApi.post('/auth/reset-password', { token, newPassword });
+    if (response.status !== 200) {
+      throw new Error('No se pudo restablecer la contraseña.');
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error al restablecer la contraseña:', error);
+    throw error;
+  }
+}

@@ -12,6 +12,8 @@ import CategoryCard from '../components/CategoryCard/CategoryCard' // Asegúrate
 import TestExamenEst from '../components/TestExamenEst/TestExamenEst'
 import CategoryCardEst from '../components/CategoryCardEst/CategoryCardEst'
 import Results from '../components/Results/Results'
+import ResetPassword from '../components/ResetPassword/ResetPassword'
+import ForgotPassword from '../components/ForgotPassword/ForgotPassword'
 // Función para comprobar la autenticación
 const checkAuth = () => {
   const token = localStorage.getItem('token')
@@ -46,6 +48,28 @@ const appRouter = createBrowserRouter([
   {
     path: '/',
     element: <Auth />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPassword />,
+    loader: () => {
+      const { token } = checkAuth();
+      if (token) {
+        return redirect('/home'); // Redirigir si el usuario ya está autenticado
+      }
+      return null;
+    },
+  },
+  {
+    path: '/reset-password/:token',
+    element: <ResetPassword />,
+    loader: () => {
+      const { token } = checkAuth();
+      if (token) {
+        return redirect('/home'); // Redirigir si el usuario ya está autenticado
+      }
+      return null;
+    },
   },
   {
     path: '/',

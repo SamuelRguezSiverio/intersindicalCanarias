@@ -52,7 +52,15 @@ const Admin = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    }
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING(40),
+      allowNull: true, // Puede ser nulo porque no todos los usuarios tendrán un token todo el tiempo
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true, // Puede ser nulo por la misma razón que el token
+    },
   },
   {
     timestamps: false,

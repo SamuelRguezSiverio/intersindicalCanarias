@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
 import backgroundIMG from '../../assets/logo/logoIntersindical.png'
 import { login } from '../../services/auth'
+import { Link } from 'react-router-dom'
 
 function Copyright(props) {
   return (
@@ -148,6 +149,15 @@ export default function LoginCard({ changeToSignup }) {
               {errorMessage}
             </Typography>
           )}
+          <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+            <Link
+              to="/forgot-password"
+              style={{ textDecoration: 'none', color: '#85b527' }}
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </Typography>
+
           <Button
             type="submit"
             fullWidth

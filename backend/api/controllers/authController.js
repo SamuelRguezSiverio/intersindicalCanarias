@@ -3,7 +3,8 @@ const Admin = require('../models/adminModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
-
+const crypto = require('crypto');
+const { Op } = require('sequelize'); // Asegúrate de importar Op de sequelize
 // Configuración del transportador de nodemailer
 const transporter = nodemailer.createTransport({
   host: 'smtp.alzados.org',
@@ -177,10 +178,10 @@ const adminEmail = hospitalEmailMap[hospital];
 
 if (adminEmail) {
   // Enviar correo electrónico al usuario registrado
-  sendEmail(email, 'Registro exitoso', 'Te has registrado exitosamente.');
+  sendEmail(email, 'Registro exitoso', 'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y posteriormente recibirá un email de activación de la cuenta, entonces podrá iniciar sesión.');
 
   // Enviar correo electrónico al administrador correspondiente
-  sendEmail(adminEmail, 'Nuevo registro', `El usuario ${email} se ha registrado exitosamente.`);
+  sendEmail(adminEmail, 'Nuevo registro', `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`);
 } else {
   console.error('Hospital no encontrado en el mapeo');
 }
@@ -310,10 +311,74 @@ async function getAdminById(req, res) {
   }
 }
 
+
+async function forgotPassword(req, res) {
+  const { email } = req.body;
+  const user = await Admin.findOne({ where: { email } });
+  if (!user) {
+    return res.status(404).send('Usuario no encontrado');
+  }
+
+  // Generar token seguro
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Establecer la fecha de caducidad del token, por ejemplo, 1 hora desde ahora
+  const expireDate = new Date();
+  expireDate.setHours(expireDate.getHours() + 1);
+
+  // Guardar el token y la fecha de caducidad en la base de datos
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = expireDate;
+  await user.save();
+
+  // Enviar correo electrónico con el token
+  const resetUrl = `https://alzados.org/reset-password/${resetToken}`;
+  const message = `Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para establecer una nueva contraseña: ${resetUrl}`;
+
+  try {
+    await sendEmail(user.email, 'Instrucciones para restablecer la contraseña', message);
+    res.status(200).send('Correo de recuperación enviado.');
+  } catch (error) {
+    res.status(500).send('Error al enviar el correo de recuperación.');
+  }
+}
+
+
+// Función para permitir al usuario restablecer su contraseña
+async function resetPassword(req, res) {
+  const { token, newPassword } = req.body;
+  // Buscar el usuario por el token y verificar que no haya expirado
+  const admin = await Admin.findOne({
+    where: {
+      resetPasswordToken: token,
+      resetPasswordExpires: {
+        [Op.gt]: Date.now() // Usar Op.gt para la comparación
+      }
+    }
+  });
+
+  if (!admin) {
+    return res.status(400).send('Token inválido o expirado');
+  }
+
+  // Hashear la nueva contraseña
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Actualizar la contraseña del usuario en la base de datos
+  admin.password = hashedPassword;
+  admin.resetPasswordToken = null;
+  admin.resetPasswordExpires = null;
+  await admin.save();
+
+  res.status(200).send('Contraseña actualizada con éxito');
+}
+
 module.exports = {
   login,
   signup,
   getAdminsByHospital,
   getAdminById,
   updateAdmin,
+  forgotPassword,
+  resetPassword
 }
