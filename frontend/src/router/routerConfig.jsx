@@ -61,7 +61,7 @@ const appRouter = createBrowserRouter([
     },
   },
   {
-    path: '/reset-password/:token',
+    path: '/reset-password/',
     element: <ResetPassword />,
     loader: () => {
       const { token } = checkAuth();

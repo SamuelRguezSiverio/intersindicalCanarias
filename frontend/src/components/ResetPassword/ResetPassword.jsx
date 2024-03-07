@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Grid, Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { resetPassword } from '../../services/auth';
+import React, { useState } from 'react'
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Grid,
+  Paper,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { styled } from '@mui/material/styles'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { resetPassword } from '../../services/auth'
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -25,30 +36,50 @@ const CssTextField = styled(TextField)({
   },
 })
 
-const theme = createTheme();
+const theme = createTheme()
 
 export default function ResetPassword() {
-  const [token, setToken] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
+  const [token, setToken] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [openDialog, setOpenDialog] = useState(false)
+
+  const navigate = useNavigate()
+
+  const validatePassword = (password) => {
+    const re = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{8,}$/
+    return re.test(password)
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    if (!validatePassword(newPassword)) {
+      setErrorMessage(
+        'La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula y un número.'
+      )
+      return
+    }
     if (newPassword !== confirmPassword) {
-      setErrorMessage('Las contraseñas no coinciden.');
-      return;
+      setErrorMessage('Las contraseñas no coinciden.')
+      return
     }
     try {
-      await resetPassword(token, newPassword);
-      setMessage('Tu contraseña ha sido restablecida con éxito. Serás redirigido a la página de inicio de sesión.');
-      navigate('/login');
+      await resetPassword(token, newPassword)
+      setOpenDialog(true)
+      setTimeout(() => {
+        navigate('/home')
+      }, 5000) // Redirige después de 5 segundos
     } catch (error) {
-      setErrorMessage('Error al restablecer la contraseña. Asegúrate de que el token sea correcto.');
+      setErrorMessage(
+        'Error al restablecer la contraseña. Asegúrate de que el token sea correcto.'
+      )
     }
-  };
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -83,7 +114,12 @@ export default function ResetPassword() {
             <Typography component="h1" variant="h5">
               Restablecer Contraseña
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <CssTextField
                 margin="normal"
                 required
@@ -123,11 +159,6 @@ export default function ResetPassword() {
                   {errorMessage}
                 </Typography>
               )}
-              {message && (
-                <Typography color="primary" textAlign="center" mt={2}>
-                  {message}
-                </Typography>
-              )}
               <Button
                 type="submit"
                 fullWidth
@@ -143,8 +174,36 @@ export default function ResetPassword() {
               </Button>
             </Box>
           </Paper>
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Los cambios se han guardado correctamente y ya puedes iniciar
+                sesión con tu nueva contraseña. Serás redirigido a la página de
+                inicio.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+ sx={{
+  color: 'white',
+  backgroundColor: '#85b527',
+  '&:hover': { backgroundColor: '#51711a' },
+}}
+                onClick={handleCloseDialog}
+                color="primary"
+                autoFocus
+              >
+                Aceptar
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Grid>
     </ThemeProvider>
-  );
+  )
 }

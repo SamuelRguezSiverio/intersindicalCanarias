@@ -35,19 +35,26 @@ export default function ForgotPassword() {
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await forgotPassword(email)
+      await forgotPassword(email);
       setMessage(
-        'Se le ha enviado un correo para iniciar el proceso de restablecimiento de contraseña.'
-      )
+        'Se le ha enviado un correo para iniciar el proceso de restablecimiento de contraseña. Continúe con la validación.'
+      );
       setTimeout(() => {
-        navigate('/home') // Redirige al usuario a la página de inicio después de mostrar el mensaje
-      }, 5000) // Espera 5 segundos antes de redirigir
+        navigate('/reset-password');
+      }, 5000); // Espera 5 segundos antes de redirigir a la página de restablecimiento
     } catch (error) {
-      setErrorMessage(error.response.data) // Maneja aquí los errores
+      setErrorMessage(error.message); // Mostrará el mensaje de error personalizado
+      if (error.message === 'No existe un usuario asociado con este correo electrónico.') {
+        setTimeout(() => {
+          navigate('/home');
+        }, 5000); // Espera 5 segundos antes de redirigir a la página de inicio si el usuario no existe
+      }
     }
-  }
+  };
+  
+  
 
   return (
     <ThemeProvider theme={theme}>
