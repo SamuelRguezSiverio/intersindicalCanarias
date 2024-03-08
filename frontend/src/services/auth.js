@@ -132,7 +132,7 @@ export async function verifyResetToken(token) {
 
 export async function deleteAdminById(id) {
   try {
-    const response = await authApi.delete(`/admins/${id}`, {
+    const response = await authApi.delete(`/auth/admins/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },

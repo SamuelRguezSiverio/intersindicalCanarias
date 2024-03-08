@@ -244,7 +244,7 @@ const Admin = () => {
                         Editar
                       </button>
                       <button
-                        className="button-delete"
+                        className="button-cancel"
                         role="button"
                         onClick={() => handleDelete(admin.id)}
                       >
