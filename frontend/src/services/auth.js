@@ -129,3 +129,22 @@ export async function verifyResetToken(token) {
     throw error
   }
 }
+
+export async function deleteAdminById(id) {
+  try {
+    const response = await authApi.delete(`/admins/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error('No se pudo eliminar el administrador.');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al eliminar el administrador:', error);
+    throw error;
+  }
+}

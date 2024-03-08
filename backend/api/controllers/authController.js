@@ -3,8 +3,8 @@ const Admin = require('../models/adminModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
-const crypto = require('crypto');
-const { Op } = require('sequelize'); // Asegúrate de importar Op de sequelize
+const crypto = require('crypto')
+const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración del transportador de nodemailer
 const transporter = nodemailer.createTransport({
   host: 'smtp.alzados.org',
@@ -12,12 +12,12 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: 'info@alzados.org', // Reemplaza con tu usuario
-    pass: 'sW71<A1Y>9_.' // Reemplaza con tu contraseña
+    pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
   },
   tls: {
-    rejectUnauthorized: false
-  }
-});
+    rejectUnauthorized: false,
+  },
+})
 
 // Función para enviar emails
 const sendEmail = (to, subject, text) => {
@@ -25,26 +25,26 @@ const sendEmail = (to, subject, text) => {
     from: 'info@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: subject,
-    text: text
-  };
+    text: text,
+  }
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log('Error al enviar el correo:', error);
+      console.log('Error al enviar el correo:', error)
     } else {
-      console.log('Correo enviado:', info.response);
+      console.log('Correo enviado:', info.response)
     }
-  });
-};
+  })
+}
 
 // Mapeo de hospitales a correos electrónicos de administradores
 const hospitalEmailMap = {
   'HUC - LA PALMA': 'intersindicalhuc@alzados.org',
   'HUNSC - LA GOMERA - EL HIERRO': 'intersindicalhunsc@alzados.org',
   'GRAN CANARIA': 'intersindicalgrancanaria@alzados.org',
-  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
-  'LANZAROTE': 'intersindicallanzarote@alzados.org'
-};
+  FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
+  LANZAROTE: 'intersindicallanzarote@alzados.org',
+}
 
 async function login(req, res) {
   try {
@@ -94,117 +94,136 @@ async function login(req, res) {
 
 // Función auxiliar para validar el email
 const validateEmail = (email) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-};
-
+  const re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
 
 // Función auxiliar para validar el NIF
 const validateNIF = (nif) => {
-  const re = /^[XYZ]?\d{5,8}[A-Z]$/; // Ajusta esta expresión regular a tus necesidades
-  return re.test(nif.toUpperCase());
-};
+  const re = /^[XYZ]?\d{5,8}[A-Z]$/ // Ajusta esta expresión regular a tus necesidades
+  return re.test(nif.toUpperCase())
+}
 
 // Función auxiliar para validar la contraseña
 const validatePassword = (password) => {
   // Asegúrate de que la contraseña tenga al menos 8 caracteres, una letra y un número
-  const re = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{8,}$/;
-  return re.test(password);
-};
+  const re = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{8,}$/
+  return re.test(password)
+}
 
 async function signup(req, res) {
   try {
-    let { name, surName, nif, email, password, mobile, category, hospital } = req.body;
+    let { name, surName, nif, email, password, mobile, category, hospital } =
+      req.body
 
-    console.log('Inicio del registro:', req.body); // Log de inicio
+    console.log('Inicio del registro:', req.body) // Log de inicio
 
     // Convertir la letra del NIF a mayúscula
-    nif = nif.toUpperCase();
+    nif = nif.toUpperCase()
 
     // Validaciones
     if (!validateEmail(email)) {
-      console.error('Error de validación: Email inválido');
-      return res.status(400).send('El formato del email no es válido.');
+      console.error('Error de validación: Email inválido')
+      return res.status(400).send('El formato del email no es válido.')
     }
     if (!validateNIF(nif)) {
-      console.error('Error de validación: NIF inválido');
-      return res.status(400).send('El formato del NIF no es válido.');
+      console.error('Error de validación: NIF inválido')
+      return res.status(400).send('El formato del NIF no es válido.')
     }
     if (!validatePassword(password)) {
-      console.error('Error de validación: Contraseña inválida');
-      return res.status(400).send('La contraseña debe tener al menos 8 caracteres incluyendo una letra mayúscula y un número.');
+      console.error('Error de validación: Contraseña inválida')
+      return res
+        .status(400)
+        .send(
+          'La contraseña debe tener al menos 8 caracteres incluyendo una letra mayúscula y un número.'
+        )
     }
 
     // Hashear la contraseña
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = bcrypt.hashSync(password, 10)
 
     // Crear el administrador
-    const admin = await Admin.create({
-      name,
-      surName,
-      nif,
-      email,
-      password: hashedPassword,
-      mobile,
-      category,
-      hospital,
-      isAdmin: false,
-      isActive: false,
-    }, {
-      fields: [
-        'name',
-        'surName',
-        'nif',
-        'email',
-        'password',
-        'mobile',
-        'category',
-        'hospital',
-        'isAdmin',
-        'isActive',
-      ],
-    });
+    const admin = await Admin.create(
+      {
+        name,
+        surName,
+        nif,
+        email,
+        password: hashedPassword,
+        mobile,
+        category,
+        hospital,
+        isAdmin: false,
+        isActive: false,
+      },
+      {
+        fields: [
+          'name',
+          'surName',
+          'nif',
+          'email',
+          'password',
+          'mobile',
+          'category',
+          'hospital',
+          'isAdmin',
+          'isActive',
+        ],
+      }
+    )
 
-    console.log('Administrador creado con éxito:', { id: admin.id, email: admin.email }); // Log de éxito
+    console.log('Administrador creado con éxito:', {
+      id: admin.id,
+      email: admin.email,
+    }) // Log de éxito
 
     // Generar el token JWT
-    const payload = { email: admin.email };
-    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' });
+    const payload = { email: admin.email }
+    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' })
 
     // Log del token
-    console.log('Token generado:', token); 
-// Obtener el correo electrónico del administrador basado en el hospital
-const adminEmail = hospitalEmailMap[hospital];
+    console.log('Token generado:', token)
+    // Obtener el correo electrónico del administrador basado en el hospital
+    const adminEmail = hospitalEmailMap[hospital]
 
-if (adminEmail) {
-  // Enviar correo electrónico al usuario registrado
-  sendEmail(email, 'Registro exitoso', 'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y posteriormente recibirá un email de activación de la cuenta, entonces podrá iniciar sesión.');
+    if (adminEmail) {
+      // Enviar correo electrónico al usuario registrado
+      sendEmail(
+        email,
+        'Registro exitoso',
+        'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y posteriormente recibirá un email de activación de la cuenta, entonces podrá iniciar sesión.'
+      )
 
-  // Enviar correo electrónico al administrador correspondiente
-  sendEmail(adminEmail, 'Nuevo registro', `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`);
-} else {
-  console.error('Hospital no encontrado en el mapeo');
-}
+      // Enviar correo electrónico al administrador correspondiente
+      sendEmail(
+        adminEmail,
+        'Nuevo registro',
+        `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
+      )
+    } else {
+      console.error('Hospital no encontrado en el mapeo')
+    }
 
-// Respuesta exitosa
-return res.status(200).json({ token: token });
-} catch (error) {
-// Log del error
-console.error('Error en la función signup:', error);
+    // Respuesta exitosa
+    return res.status(200).json({ token: token })
+  } catch (error) {
+    // Log del error
+    console.error('Error en la función signup:', error)
 
-// Manejo de errores específicos
-if (error.name === 'SequelizeUniqueConstraintError') {
-  const field = error.errors[0].path;
-  console.error('Error de restricción de unicidad:', field);
-  if (field === 'email') {
-    return res.status(400).send('El email ya está en uso.');
-  } else {
-    return res.status(400).send(`El campo ${field} ya está en uso.`);
+    // Manejo de errores específicos
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      const field = error.errors[0].path
+      console.error('Error de restricción de unicidad:', field)
+      if (field === 'email') {
+        return res.status(400).send('El email ya está en uso.')
+      } else {
+        return res.status(400).send(`El campo ${field} ya está en uso.`)
+      }
+    }
+    // Respuesta de error
+    return res.status(500).send(error.message)
   }
-}
-// Respuesta de error
-return res.status(500).send(error.message);
-}
 }
 
 async function getAdminsByHospital(req, res) {
@@ -232,69 +251,78 @@ const sendActivationEmail = async (to, name) => {
     from: 'info@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: 'Cuenta Activada',
-    text: `Hola ${name},\n\nTu cuenta ha sido activada y ya puedes iniciar sesión.\n\nSaludos,\nEl Equipo de Soporte`
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('Correo de activación enviado a:', to);
-  } catch (error) {
-    console.error('Error al enviar el correo de activación:', error);
+    text: `Hola ${name},\n\nTu cuenta ha sido activada y ya puedes iniciar sesión.\n\nSaludos,\nEl Equipo de Soporte`,
   }
-};
 
-async function updateAdmin(req, res) {
   try {
-    const { id } = req.params;
-    const { name, surName, nif, email, mobile, category, hospital, isActive, newPassword } = req.body;
-
-    console.log('Nueva contraseña recibida:', newPassword); // Agregar para depuración
-
-    const admin = await Admin.findOne({ where: { id } });
-
-    if (!admin) {
-      return res.status(404).json({ message: 'Administrador no encontrado' });
-    }
-
-    let isPasswordUpdated = false;
-    let wasActiveUpdated = admin.isActive !== isActive;
-
-    if (newPassword && newPassword.trim()) {
-      const currentHashedPassword = admin.password;
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-      if (currentHashedPassword !== hashedPassword) {
-        await admin.update({ password: hashedPassword });
-        isPasswordUpdated = true;
-      }
-    }
-
-    admin.name = name;
-    admin.surName = surName;
-    admin.nif = nif;
-    admin.email = email;
-    admin.mobile = mobile;
-    admin.category = category;
-    admin.hospital = hospital;
-    admin.isActive = isActive;
-
-    await admin.save();
-
-    if (wasActiveUpdated && isActive === true) {
-      await sendActivationEmail(email, name);
-    }
-
-    const updatedAdmin = admin.toJSON();
-    delete updatedAdmin.password;
-
-    console.log('Contraseña actualizada:', isPasswordUpdated);
-    return res.status(200).json(updatedAdmin);
+    await transporter.sendMail(mailOptions)
+    console.log('Correo de activación enviado a:', to)
   } catch (error) {
-    return res.status(500).send(error.message);
+    console.error('Error al enviar el correo de activación:', error)
   }
 }
 
+async function updateAdmin(req, res) {
+  try {
+    const { id } = req.params
+    const {
+      name,
+      surName,
+      nif,
+      email,
+      mobile,
+      category,
+      hospital,
+      isActive,
+      newPassword,
+    } = req.body
+
+    console.log('Nueva contraseña recibida:', newPassword) // Agregar para depuración
+
+    const admin = await Admin.findOne({ where: { id } })
+
+    if (!admin) {
+      return res.status(404).json({ message: 'Administrador no encontrado' })
+    }
+
+    let isPasswordUpdated = false
+    let wasActiveUpdated = admin.isActive !== isActive
+
+    if (newPassword && newPassword.trim()) {
+      const currentHashedPassword = admin.password
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+      if (currentHashedPassword !== hashedPassword) {
+        await admin.update({ password: hashedPassword })
+        isPasswordUpdated = true
+      }
+    }
+
+    admin.name = name
+    admin.surName = surName
+    admin.nif = nif
+    admin.email = email
+    admin.mobile = mobile
+    admin.category = category
+    admin.hospital = hospital
+    admin.isActive = isActive
+
+    await admin.save()
+
+    if (wasActiveUpdated && isActive === true) {
+      await sendActivationEmail(email, name)
+    }
+
+    const updatedAdmin = admin.toJSON()
+    delete updatedAdmin.password
+
+    console.log('Contraseña actualizada:', isPasswordUpdated)
+    return res.status(200).json(updatedAdmin)
+  } catch (error) {
+    return res.status(500).send(error.message)
+  }
+}
 
 async function getAdminById(req, res) {
   try {
@@ -311,72 +339,72 @@ async function getAdminById(req, res) {
   }
 }
 
-
 // Función para iniciar el proceso de restablecimiento de contraseña
 async function forgotPassword(req, res) {
-  const { email } = req.body;
-  const user = await Admin.findOne({ where: { email } });
+  const { email } = req.body
+  const user = await Admin.findOne({ where: { email } })
   if (!user) {
-    return res.status(404).send('Usuario no encontrado');
+    return res.status(404).send('Usuario no encontrado')
   }
 
   // Generar token seguro
-  const resetToken = crypto.randomBytes(20).toString('hex');
+  const resetToken = crypto.randomBytes(20).toString('hex')
 
   // Establecer la fecha de caducidad del token, por ejemplo, 1 hora desde ahora
-  const expireDate = new Date();
-  expireDate.setHours(expireDate.getHours() + 1);
+  const expireDate = new Date()
+  expireDate.setHours(expireDate.getHours() + 1)
 
   // Guardar el token y la fecha de caducidad en la base de datos
-  user.resetPasswordToken = resetToken;
-  user.resetPasswordExpires = expireDate;
-  await user.save();
+  user.resetPasswordToken = resetToken
+  user.resetPasswordExpires = expireDate
+  await user.save()
 
   // Enviar correo electrónico con el token en el cuerpo del mensaje
-  const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`;
+  const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`
 
   try {
-    await sendEmail(user.email, 'Instrucciones para restablecer la contraseña', message);
-    res.status(200).send('Correo de recuperación enviado.');
+    await sendEmail(
+      user.email,
+      'Instrucciones para restablecer la contraseña',
+      message
+    )
+    res.status(200).send('Correo de recuperación enviado.')
   } catch (error) {
-    res.status(500).send('Error al enviar el correo de recuperación.');
+    res.status(500).send('Error al enviar el correo de recuperación.')
   }
 }
 
-
-
-
 // Función para permitir al usuario restablecer su contraseña
 async function resetPassword(req, res) {
-  const { token, newPassword } = req.body;
+  const { token, newPassword } = req.body
   // Buscar el usuario por el token y verificar que no haya expirado
   const admin = await Admin.findOne({
     where: {
       resetPasswordToken: token,
       resetPasswordExpires: {
-        [Op.gt]: Date.now() // Usar Op.gt para la comparación
-      }
-    }
-  });
+        [Op.gt]: Date.now(), // Usar Op.gt para la comparación
+      },
+    },
+  })
 
   if (!admin) {
-    return res.status(400).send('Token inválido o expirado');
+    return res.status(400).send('Token inválido o expirado')
   }
 
   // Hashear la nueva contraseña
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const hashedPassword = await bcrypt.hash(newPassword, 10)
 
   // Actualizar la contraseña del usuario en la base de datos
-  admin.password = hashedPassword;
-  admin.resetPasswordToken = null;
-  admin.resetPasswordExpires = null;
-  await admin.save();
+  admin.password = hashedPassword
+  admin.resetPasswordToken = null
+  admin.resetPasswordExpires = null
+  await admin.save()
 
-  res.status(200).send('Contraseña actualizada con éxito');
+  res.status(200).send('Contraseña actualizada con éxito')
 }
 
 async function getResetPasswordToken(req, res) {
-  const { token } = req.params;
+  const { token } = req.params
 
   try {
     // Buscar al usuario con el token proporcionado y verificar que no haya expirado
@@ -384,23 +412,49 @@ async function getResetPasswordToken(req, res) {
       where: {
         resetPasswordToken: token,
         resetPasswordExpires: {
-          [Op.gt]: new Date() // Asegúrate de que el token no haya expirado
-        }
-      }
-    });
+          [Op.gt]: new Date(), // Asegúrate de que el token no haya expirado
+        },
+      },
+    })
 
     if (!user) {
       // Si no se encuentra el usuario o el token ha expirado, enviar una respuesta de error
-      return res.status(404).json({ message: 'El enlace de restablecimiento de contraseña es inválido o ha expirado.' });
+      return res
+        .status(404)
+        .json({
+          message:
+            'El enlace de restablecimiento de contraseña es inválido o ha expirado.',
+        })
     }
 
     // Si el token es válido, redirigir al usuario a la página de restablecimiento de contraseña en el cliente
     // Asegúrate de que la URL de redirección sea correcta y coincida con la configuración de tu cliente React
-    res.redirect(`https://${req.headers.host}/reset-password/${token}`);
+    res.redirect(`https://${req.headers.host}/reset-password/${token}`)
   } catch (error) {
     // Manejar cualquier error que ocurra durante el proceso
-    console.error('Error al obtener el token de restablecimiento de contraseña:', error);
-    res.status(500).json({ message: 'Error interno del servidor al procesar la solicitud.' });
+    console.error(
+      'Error al obtener el token de restablecimiento de contraseña:',
+      error
+    )
+    res
+      .status(500)
+      .json({ message: 'Error interno del servidor al procesar la solicitud.' })
+  }
+}
+
+async function deleteAdminById(req, res) {
+  try {
+    const { id } = req.params; // Obtener el ID del administrador de los parámetros de la ruta
+    const admin = await Admin.findOne({ where: { id } });
+
+    if (!admin) {
+      return res.status(404).send('Administrador no encontrado');
+    }
+
+    await admin.destroy(); // Utiliza el método adecuado para eliminar el registro en tu ORM
+    return res.status(200).send('Administrador eliminado con éxito');
+  } catch (error) {
+    return res.status(500).send(error.message);
   }
 }
 
@@ -412,5 +466,6 @@ module.exports = {
   updateAdmin,
   forgotPassword,
   resetPassword,
-  getResetPasswordToken
+  getResetPasswordToken,
+  deleteAdminById
 }

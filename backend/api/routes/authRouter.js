@@ -8,7 +8,8 @@ const {
   getAdminById,
   forgotPassword,
   resetPassword,
-  getResetPasswordToken
+  getResetPasswordToken,
+  deleteAdminById
 } = require('../controllers/authController')
 
 const { sendEmail } = require('../controllers/emailController');
@@ -26,5 +27,6 @@ router.post('/send', (req, res) => {
   sendEmail(to, subject, text);
   res.send('Correo enviado');
 });
+router.delete('/admins/:id', deleteAdminById)
 
 module.exports = router

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { getAdminsByHospital, updateAdmin } from '../../services/auth'
+import {
+  getAdminsByHospital,
+  updateAdmin,
+  deleteAdminById,
+} from '../../services/auth'
 import './Admin.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -48,6 +52,16 @@ const Admin = () => {
   const filteredAdmins = admins.filter((admin) =>
     admin.nif.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const handleDelete = async (adminId) => {
+    try {
+      await deleteAdminById(adminId)
+      setAdmins(admins.filter((admin) => admin.id !== adminId))
+    } catch (error) {
+      console.error('Error al eliminar el administrador:', error)
+      // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
+    }
+  }
 
   return (
     <div className="container">
@@ -221,13 +235,22 @@ const Admin = () => {
                       </button>
                     </>
                   ) : (
-                    <button
-                      className="button-edit"
-                      role="button"
-                      onClick={() => handleEdit(admin)}
-                    >
-                      Editar
-                    </button>
+                    <>
+                      <button
+                        className="button-edit"
+                        role="button"
+                        onClick={() => handleEdit(admin)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="button-delete"
+                        role="button"
+                        onClick={() => handleDelete(admin.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>
