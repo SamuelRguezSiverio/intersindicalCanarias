@@ -107,3 +107,9 @@
   cursor: not-allowed; /* Cambia el cursor para indicar que el botón está deshabilitado */
   color: #c7d1c7; /* Color de texto más claro para el estado deshabilitado */
 }
+
+@media (max-width: 500px) {
+  .test-container {
+    width: 370px !important;
+  }
+}

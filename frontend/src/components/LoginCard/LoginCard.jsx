@@ -170,7 +170,7 @@ export default function LoginCard({ changeToSignup }) {
               '&:hover': { backgroundColor: '#51711a' },
             }}
           >
-            Login
+            Iniciar Sesión
           </Button>
           <Typography variant="body1">
             Si no estás dado de alta,{' '}

@@ -248,7 +248,7 @@ function SignupCard({ changeToLogin }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ maxWidth: '500px', m: 10 }}>
+      <Card sx={{ maxWidth: '500px', m: 2 }}>
         <CardHeader sx={{ color: '#51711a' }} title="Solicitud de Registro" />
         <CardContent>
           <CssTextField

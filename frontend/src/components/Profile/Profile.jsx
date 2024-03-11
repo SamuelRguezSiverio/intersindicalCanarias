@@ -120,8 +120,7 @@ const Profile = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          height: '100vh'
-          
+          height: 'calc(100vh - 50px)',
         }}
       >
         {!isEditing ? (
@@ -130,7 +129,6 @@ const Profile = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height: '100vh', // Altura completa de la ventana gráfica
             }}
           >
             <Card sx={{ minWidth: 275, mt: 2 }}>
@@ -179,14 +177,20 @@ const Profile = () => {
             noValidate
             sx={{
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              flexDirection: 'column',
               m: 5,
-              p: 5,
-              minWidth: '500px',
+              p: { xs: 2, sm: 3, md: 5 }, // Ajusta el padding según el tamaño de la pantalla
+              width: { xs: '90%', sm: '400px', md: '500px' }, // Ajusta el ancho según el tamaño de la pantalla
               borderRadius: 5,
               backgroundColor: 'white',
+              '& .MuiButton-root': {
+                // Estilos para los botones de Material-UI
+                m: 1, // Margen para los botones
+                width: '100%', // Ancho completo dentro del contenedor
+                maxWidth: '300px', // Ancho máximo para los botones
+              },
             }}
           >
             <CssTextField

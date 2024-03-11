@@ -77,3 +77,9 @@
     opacity: 0.5;
   }
 }
+
+@media (max-width: 500px) {
+  .results-container {
+    width: 370px !important;
+  }
+}

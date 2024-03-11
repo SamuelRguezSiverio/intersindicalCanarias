@@ -56,13 +56,6 @@ const appRouter = createBrowserRouter([
   {
     path: '/reset-password/',
     element: <ResetPassword />,
-    loader: () => {
-      const { token } = checkAuth();
-      if (token) {
-        return redirect('/home'); // Redirigir si el usuario ya está autenticado
-      }
-      return null;
-    },
   },
   {
     path: '/',

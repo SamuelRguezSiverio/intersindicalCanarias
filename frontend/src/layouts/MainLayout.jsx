@@ -133,7 +133,7 @@ function MainLayout() {
           display: 'flex', // Usa flexbox para centrar el contenido
           justifyContent: 'center', // Centra horizontalmente
           alignItems: 'center', // Centra verticalmente
-          height: '30px', // Altura fija del footer
+          height: '50px', // Altura fija del footer
         }}
       >
         <Typography
