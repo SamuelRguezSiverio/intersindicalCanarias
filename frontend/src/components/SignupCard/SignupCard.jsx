@@ -375,8 +375,8 @@ function SignupCard({ changeToLogin }) {
               <MenuItem value="HUC & LA PALMA" sx={{ color: 'blue', fontWeight: '700' }}>
                 HUC & LA PALMA
               </MenuItem>
-              <MenuItem value="HUNSC & LA GOMERA & EL HIERRO" sx={{ color: 'green', fontWeight: '700' }}>
-                HUNSC & LA GOMERA & EL HIERRO
+              <MenuItem value="HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO" sx={{ color: 'green', fontWeight: '700' }}>
+                HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO
               </MenuItem>
               <MenuItem value="GRAN CANARIA" sx={{ color: 'orange', fontWeight: '700' }}>GRAN CANARIA</MenuItem>
               <MenuItem value="FUERTEVENTURA" sx={{ color: 'brown', fontWeight: '700' }}>FUERTEVENTURA</MenuItem>
