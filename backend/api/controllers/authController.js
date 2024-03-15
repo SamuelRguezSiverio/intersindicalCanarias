@@ -39,8 +39,8 @@ const sendEmail = (to, subject, text) => {
 
 // Mapeo de hospitales a correos electrónicos de administradores
 const hospitalEmailMap = {
-  'HUC - LA PALMA': 'intersindicalhuc@alzados.org',
-  'HUNSC - LA GOMERA - EL HIERRO': 'intersindicalhunsc@alzados.org',
+  'HUC & LA PALMA': 'intersindicalhuc@alzados.org',
+  'HUNSC & LA GOMERA & EL HIERRO': 'intersindicalhunsc@alzados.org',
   'GRAN CANARIA': 'intersindicalgrancanaria@alzados.org',
   FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
   LANZAROTE: 'intersindicallanzarote@alzados.org',

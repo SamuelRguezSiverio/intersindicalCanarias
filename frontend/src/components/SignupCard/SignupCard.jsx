@@ -372,13 +372,15 @@ function SignupCard({ changeToLogin }) {
               onChange={handleInputChange}
               label="Hospital"
             >
-              <MenuItem value="HUC - LA PALMA">HUC - LA PALMA</MenuItem>
-              <MenuItem value="HUNSC - LA GOMERA - EL HIERRO">
-                HUNSC - LA GOMERA - EL HIERRO
+              <MenuItem value="HUC & LA PALMA" sx={{ color: 'blue', fontWeight: '700' }}>
+                HUC & LA PALMA
               </MenuItem>
-              <MenuItem value="GRAN CANARIA">GRAN CANARIA</MenuItem>
-              <MenuItem value="FUERTEVENTURA">FUERTEVENTURA</MenuItem>
-              <MenuItem value="LANZAROTE">LANZAROTE</MenuItem>
+              <MenuItem value="HUNSC & LA GOMERA & EL HIERRO" sx={{ color: 'green', fontWeight: '700' }}>
+                HUNSC & LA GOMERA & EL HIERRO
+              </MenuItem>
+              <MenuItem value="GRAN CANARIA" sx={{ color: 'orange', fontWeight: '700' }}>GRAN CANARIA</MenuItem>
+              <MenuItem value="FUERTEVENTURA" sx={{ color: 'brown', fontWeight: '700' }}>FUERTEVENTURA</MenuItem>
+              <MenuItem value="LANZAROTE" sx={{ color: 'red',fontWeight: '700' }}>LANZAROTE</MenuItem>
             </Select>
           </FormControl>
           {errors.form && (
