@@ -43,6 +43,10 @@ const Admin = sequelize.define(
       type: DataTypes.STRING(191), // Longitud reducida a 191
       allowNull: false,
     },
+    workPlace: {
+      type: DataTypes.STRING(191), // Longitud reducida a 191
+      allowNull: false,
+    },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

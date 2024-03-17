@@ -56,6 +56,7 @@ function SignupCard({ changeToLogin }) {
     mobile: '',
     category: '',
     hospital: '',
+    workPlace: ''
   })
   const [errors, setErrors] = useState({})
   const [isPassVisible, setIsPassVisible] = useState(false)
@@ -92,6 +93,7 @@ function SignupCard({ changeToLogin }) {
     tempErrors.hospital = formValues.hospital
       ? ''
       : 'Este campo es obligatorio.'
+      tempErrors.workPlace = formValues.workPlace ? '' : 'Este campo es obligatorio.'
     setErrors(tempErrors)
     return Object.values(tempErrors).every((x) => x === '')
   }
@@ -107,6 +109,7 @@ function SignupCard({ changeToLogin }) {
         mobile: formValues.mobile,
         category: formValues.category,
         hospital: formValues.hospital,
+        workPlace: formValues.workPlace
       }
       try {
         const apiResponse = await signup(dataInSignup)
@@ -248,7 +251,15 @@ function SignupCard({ changeToLogin }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ maxWidth: '500px', m: 2 }}>
+      <Card
+        sx={{
+          maxWidth: '500px',
+          m: 2,
+          '@media screen and (max-width: 380px)': {
+            maxWidth: '370px',
+          },
+        }}
+      >
         <CardHeader sx={{ color: '#51711a' }} title="Solicitud de Registro" />
         <CardContent>
           <CssTextField
@@ -372,17 +383,49 @@ function SignupCard({ changeToLogin }) {
               onChange={handleInputChange}
               label="Hospital"
             >
-              <MenuItem value="HUC & LA PALMA" sx={{ color: 'blue', fontWeight: '700' }}>
+              <MenuItem
+                value="HUC & LA PALMA"
+                sx={{ color: 'blue', fontWeight: '700' }}
+              >
                 HUC & LA PALMA
               </MenuItem>
-              <MenuItem value="HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO" sx={{ color: 'green', fontWeight: '700' }}>
+              <MenuItem
+                value="HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO"
+                sx={{ color: 'green', fontWeight: '700', whiteSpace: 'normal' }}
+              >
                 HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO
               </MenuItem>
-              <MenuItem value="GRAN CANARIA" sx={{ color: 'orange', fontWeight: '700' }}>GRAN CANARIA</MenuItem>
-              <MenuItem value="FUERTEVENTURA" sx={{ color: 'brown', fontWeight: '700' }}>FUERTEVENTURA</MenuItem>
-              <MenuItem value="LANZAROTE" sx={{ color: 'red',fontWeight: '700' }}>LANZAROTE</MenuItem>
+              <MenuItem
+                value="GRAN CANARIA"
+                sx={{ color: 'orange', fontWeight: '700' }}
+              >
+                GRAN CANARIA
+              </MenuItem>
+              <MenuItem
+                value="FUERTEVENTURA"
+                sx={{ color: 'brown', fontWeight: '700' }}
+              >
+                FUERTEVENTURA
+              </MenuItem>
+              <MenuItem
+                value="LANZAROTE"
+                sx={{ color: 'red', fontWeight: '700' }}
+              >
+                LANZAROTE
+              </MenuItem>
             </Select>
           </FormControl>
+          <CssTextField
+            name="workPlace"
+            onChange={handleInputChange}
+            label="Centro de Trabajo"
+            variant="outlined"
+            fullWidth
+            required
+            error={!!errors.workPlace}
+            helperText={errors.workPlace}
+            sx={{ marginTop: '20px' }}
+          />
           {errors.form && (
             <Typography color="error" sx={{ mt: 2 }}>
               {errors.form}

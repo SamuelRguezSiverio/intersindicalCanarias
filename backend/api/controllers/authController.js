@@ -76,6 +76,7 @@ async function login(req, res) {
         mobile: admin.mobile, // Añade el móvil si es necesario
         category: admin.category, // Añade la categoría si es necesario
         hospital: admin.hospital,
+        workPlace: admin.workPlace,
         isAdmin: admin.isAdmin,
         isActive: admin.isActive, // Añade el estado de activación si es necesario
       }
@@ -154,6 +155,7 @@ async function signup(req, res) {
         mobile,
         category,
         hospital,
+        workPlace,
         isAdmin: false,
         isActive: false,
       },
@@ -167,6 +169,7 @@ async function signup(req, res) {
           'mobile',
           'category',
           'hospital',
+          'workPlace',
           'isAdmin',
           'isActive',
         ],
@@ -273,6 +276,7 @@ async function updateAdmin(req, res) {
       mobile,
       category,
       hospital,
+      workPlace,
       isActive,
       newPassword,
     } = req.body
@@ -306,6 +310,7 @@ async function updateAdmin(req, res) {
     admin.mobile = mobile
     admin.category = category
     admin.hospital = hospital
+    admin.workPlace = workPlace
     admin.isActive = isActive
 
     await admin.save()
