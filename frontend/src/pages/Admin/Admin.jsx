@@ -88,7 +88,7 @@ const Admin = () => {
               <th>Móvil</th>
               <th>Categoría</th>
               <th>Hospital</th>
-              {/* <th>Es Admin</th> */}
+              <th>Centro</th>
               <th>Está Activo</th>
               <th>Acciones</th>
             </tr>
@@ -178,6 +178,18 @@ const Admin = () => {
                     />
                   ) : (
                     admin.hospital
+                  )}
+                </td>
+                <td data-label="Centro de Trabajo">
+                  {editAdminId === admin.id ? (
+                    <input
+                      type="text"
+                      name="workPlace"
+                      value={formData.workPlace}
+                      onChange={handleChange}
+                    />
+                  ) : (
+                    admin.workPlace
                   )}
                 </td>
                 {/* <td>

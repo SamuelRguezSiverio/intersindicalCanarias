@@ -115,7 +115,7 @@ const validatePassword = (password) => {
 
 async function signup(req, res) {
   try {
-    let { name, surName, nif, email, password, mobile, category, hospital } =
+    let { name, surName, nif, email, password, mobile, category, hospital, workPlace } =
       req.body
 
     console.log('Inicio del registro:', req.body) // Log de inicio
