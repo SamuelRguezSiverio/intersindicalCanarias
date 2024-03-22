@@ -20,6 +20,7 @@ import {
   DialogContentText,
   DialogTitle,
   Typography,
+  FormHelperText
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material/'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -61,6 +62,8 @@ function SignupCard({ changeToLogin }) {
   const [errors, setErrors] = useState({})
   const [isPassVisible, setIsPassVisible] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
+  const [selectedHospital, setSelectedHospital] = useState('');
+  const [workPlaces, setWorkPlaces] = useState([]);
 
   useEffect(() => {
     let timer
@@ -71,6 +74,26 @@ function SignupCard({ changeToLogin }) {
     }
     return () => clearTimeout(timer)
   }, [openDialog])
+
+  const hospitalsWithCenters = {
+    'TENERIFE': ['Hospital Universitario de Canarias', 'Complejo Hospitalario de la Candelaria', 'GAP Tenerife'],
+    'GRAN CANARIA': ['CHUIMI', 'Negrín', 'Atención Primaria Gran Canaria', 'JASS Cabildo', 'Centros Privados'],
+    // Añade aquí otros hospitales con centros si los hay
+  };
+
+  const handleHospitalChange = (event) => {
+    const selectedHospital = event.target.value;
+    setSelectedHospital(selectedHospital);
+    setFormValues({ ...formValues, hospital: selectedHospital, workPlace: '' });
+  
+    if (hospitalsWithCenters[selectedHospital]) {
+      setWorkPlaces(hospitalsWithCenters[selectedHospital]);
+    } else {
+      setWorkPlaces([]);
+    }
+  };
+  
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -374,58 +397,72 @@ function SignupCard({ changeToLogin }) {
             fullWidth
             required
             error={!!errors.hospital}
+            sx={{ marginBottom: '20px' }}
           >
             <InputLabel id="hospital-label">Hospital</InputLabel>
             <Select
               name="hospital"
               labelId="hospital-label"
               value={formValues.hospital}
-              onChange={handleInputChange}
+              onChange={handleHospitalChange}
               label="Hospital"
             >
               <MenuItem
-                value="HUC & LA PALMA"
-                sx={{ color: 'blue', fontWeight: '700' }}
+                value="TENERIFE"
               >
-                HUC & LA PALMA
+                TENERIFE
               </MenuItem>
               <MenuItem
-                value="HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO"
-                sx={{ color: 'green', fontWeight: '700', whiteSpace: 'normal' }}
+                value="LA PALMA"
               >
-                HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO
+                LA PALMA
+              </MenuItem>
+              <MenuItem
+                value="LA GOMERA"
+              >
+                LA GOMERA
+              </MenuItem>
+              <MenuItem
+                value="EL HIERRO"
+              >
+                EL HIERRO
               </MenuItem>
               <MenuItem
                 value="GRAN CANARIA"
-                sx={{ color: 'orange', fontWeight: '700' }}
               >
                 GRAN CANARIA
               </MenuItem>
               <MenuItem
                 value="FUERTEVENTURA"
-                sx={{ color: 'brown', fontWeight: '700' }}
               >
                 FUERTEVENTURA
               </MenuItem>
               <MenuItem
                 value="LANZAROTE"
-                sx={{ color: 'red', fontWeight: '700' }}
               >
                 LANZAROTE
               </MenuItem>
             </Select>
           </FormControl>
-          <CssTextField
-            name="workPlace"
-            onChange={handleInputChange}
-            label="Centro de Trabajo"
-            variant="outlined"
-            fullWidth
-            required
-            error={!!errors.workPlace}
-            helperText={errors.workPlace}
-            sx={{ marginTop: '20px' }}
-          />
+
+          {selectedHospital && workPlaces.length > 0 && (
+          <FormControl variant="outlined" fullWidth required error={!!errors.workPlace}>
+            <InputLabel id="workPlace-label">Centro de Trabajo</InputLabel>
+            <Select
+              name="workPlace"
+              labelId="workPlace-label"
+              value={formValues.workPlace}
+              onChange={(e) => setFormValues({ ...formValues, workPlace: e.target.value })}
+              label="Centro de Trabajo"
+            >
+              {workPlaces.map((workPlace, index) => (
+                <MenuItem key={index} value={workPlace}>
+                  {workPlace}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
           {errors.form && (
             <Typography color="error" sx={{ mt: 2 }}>
               {errors.form}

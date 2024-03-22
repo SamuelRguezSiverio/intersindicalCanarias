@@ -38,13 +38,21 @@ const sendEmail = (to, subject, text) => {
 }
 
 // Mapeo de hospitales a correos electrónicos de administradores
-const hospitalEmailMap = {
-  'HUC & LA PALMA': 'intersindicalhuc@alzados.org',
-  'HUNSC & GAP TENERIFE & LA GOMERA & EL HIERRO': 'intersindicalhunsc@alzados.org',
-  'GRAN CANARIA': 'intersindicalgrancanaria@alzados.org',
-  FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
-  LANZAROTE: 'intersindicallanzarote@alzados.org',
-}
+const emailMap = {
+  'LA PALMA': 'intersindicalhuc@alzados.org',
+  'LA GOMERA': 'intersindicalhunsc@alzados.org',
+  'EL HIERRO': 'intersindicalhunsc@alzados.org',
+  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
+  'LANZAROTE': 'intersindicallanzarote@alzados.org',
+  'Hospital Universitario de Canarias': 'intersindicalhuc@alzados.org',
+  'Complejo Hospitalario de la Candelaria': 'intersindicalhunsc@alzados.org',
+  'GAP Tenerife': 'intersindicalhunsc@alzados.org',
+  'CHUIMI': 'intersindicalgrancanaria@alzados.org',
+  'Negrín': 'intersindicalgrancanaria@alzados.org',
+  'Atención Primaria Gran Canaria': 'intersindicalgrancanaria@alzados.org',
+  'JASS Cabildo': 'intersindicalgrancanaria@alzados.org',
+  'Centros Privados': 'intersindicalgrancanaria@alzados.org',
+};
 
 async function login(req, res) {
   try {
@@ -188,7 +196,7 @@ async function signup(req, res) {
     // Log del token
     console.log('Token generado:', token)
     // Obtener el correo electrónico del administrador basado en el hospital
-    const adminEmail = hospitalEmailMap[hospital]
+    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital];
 
     if (adminEmail) {
       // Enviar correo electrónico al usuario registrado
