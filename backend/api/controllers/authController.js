@@ -239,23 +239,30 @@ async function signup(req, res) {
 
 async function getAdminsByHospital(req, res) {
   try {
-    // Asumiendo que el hospital del admin está incluido en el token JWT
-    const authHeader = req.headers.authorization
-    const tokenStart = authHeader.indexOf(' ') + 1 // Encontrar el inicio del token
-    const token = authHeader.substring(tokenStart) // Extraer el token del header
-    const decoded = jwt.verify(token, process.env.SECRET) // Decodificar el token
+    // Asumiendo que el correo electrónico del admin está incluido en el token JWT
+    const authHeader = req.headers.authorization;
+    const tokenStart = authHeader.indexOf(' ') + 1; // Encontrar el inicio del token
+    const token = authHeader.substring(tokenStart); // Extraer el token del header
+    const decoded = jwt.verify(token, process.env.SECRET); // Decodificar el token
+
+    // Obtener la lista de hospitales y centros de trabajo basados en el correo electrónico del admin
+    const adminHospitalsAndCenters = Object.keys(emailMap).filter(key => emailMap[key] === decoded.email);
 
     const admins = await Admin.findAll({
       where: {
-        hospital: decoded.hospital, // Filtrar administradores por el hospital del admin
+        [Op.or]: [
+          { hospital: adminHospitalsAndCenters },
+          { workPlace: adminHospitalsAndCenters }
+        ]
       },
-    })
+    });
 
-    return res.status(200).json(admins)
+    return res.status(200).json(admins);
   } catch (error) {
-    return res.status(500).send(error.message)
+    return res.status(500).send(error.message);
   }
 }
+
 
 const sendActivationEmail = async (to, name) => {
   const mailOptions = {
