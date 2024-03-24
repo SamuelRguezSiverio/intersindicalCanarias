@@ -116,10 +116,15 @@ function SignupCard({ changeToLogin }) {
     tempErrors.hospital = formValues.hospital
       ? ''
       : 'Este campo es obligatorio.'
-      tempErrors.workPlace = formValues.workPlace ? '' : 'Este campo es obligatorio.'
-    setErrors(tempErrors)
-    return Object.values(tempErrors).every((x) => x === '')
-  }
+      if (hospitalsWithCenters[formValues.hospital] && hospitalsWithCenters[formValues.hospital].length > 0) {
+        tempErrors.workPlace = formValues.workPlace ? '' : 'Este campo es obligatorio.';
+      } else {
+        tempErrors.workPlace = ''; // No es obligatorio si no hay centros
+      }
+    
+      setErrors(tempErrors);
+      return Object.values(tempErrors).every((x) => x === '');
+    };
 
   const onSignup = async () => {
     if (validateForm()) {

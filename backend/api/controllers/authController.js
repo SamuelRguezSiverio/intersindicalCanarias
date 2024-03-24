@@ -203,7 +203,7 @@ async function signup(req, res) {
       sendEmail(
         email,
         'Registro exitoso',
-        'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y posteriormente recibirá un email de activación de la cuenta, entonces podrá iniciar sesión.'
+        'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y, posteriormente, recibirás un email de activación de la cuenta, entonces podrás iniciar sesión.'
       )
 
       // Enviar correo electrónico al administrador correspondiente

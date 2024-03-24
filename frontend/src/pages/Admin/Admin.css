@@ -3,15 +3,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  height: calc(100vh - 48px);
 }
 
 .table-admins {
   width: 100%;
-  max-width: 100%; /* Asegura que la tabla no exceda el ancho del contenedor */
+  max-width: 100%;
+  /* Asegura que la tabla no exceda el ancho del contenedor */
   background-color: white;
   border-collapse: collapse;
   margin-top: 20px;
@@ -22,7 +20,8 @@
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
-  min-width: 100px; /* Establece un ancho mínimo para las celdas */
+  min-width: 100px;
+  /* Establece un ancho mínimo para las celdas */
 }
 
 .table-admins th {
@@ -37,10 +36,13 @@
 
 /* Media queries para tamaños de pantalla más pequeños */
 @media (max-width: 768px) {
+
   .table-admins th,
   .table-admins td {
-    padding: 4px; /* Reduce el padding para pantallas pequeñas */
-    font-size: 0.8em; /* Reduce el tamaño de la fuente para pantallas pequeñas */
+    padding: 4px;
+    /* Reduce el padding para pantallas pequeñas */
+    font-size: 0.8em;
+    /* Reduce el tamaño de la fuente para pantallas pequeñas */
   }
 }
 
@@ -205,7 +207,9 @@
   width: fit-content;
   height: fit-content;
   position: relative;
+  margin-top: 80px;
 }
+
 .input-search {
   height: 50px;
   width: 50px;
@@ -221,12 +225,14 @@
   color: #fff;
   margin-left: 20px;
 }
+
 .input-search::placeholder {
   color: white;
   font-size: 18px;
   letter-spacing: 2px;
   font-weight: 100;
 }
+
 .btn-search {
   width: 50px;
   height: 50px;
@@ -242,13 +248,15 @@
   background-color: transparent;
   pointer-events: painted;
 }
-.btn-search:focus ~ .input-search {
+
+.btn-search:focus~.input-search {
   width: 400px;
   border-radius: 0px;
   background-color: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
+
 .input-search:focus {
   width: 400px;
   border-radius: 0px;
