@@ -5,36 +5,65 @@ const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración del transportador de nodemailer
-const transporter = nodemailer.createTransport({
-  host: 'smtp.alzados.org',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'info@alzados.org', // Reemplaza con tu usuario
-    pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-})
+const transporters = [
+  // Transporter para la primera cuenta
+  nodemailer.createTransport({
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'info@alzados.org', // Reemplaza con tu usuario
+      pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  }),
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'info@infovalidaciones1.org', // Reemplaza con tu usuario
+      pass: 'rFucMLdvg78spAcAbMqU', // Reemplaza con tu contraseña
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  }
+];
 
-// Función para enviar emails
+let currentTransporterIndex = 0;
+let retryCount = 0; // Contador de reintentos
+
+// Función para enviar emails que rota entre transporters
 const sendEmail = (to, subject, text) => {
+  if (retryCount >= transporters.length) {
+    console.log('Todos los transporters han alcanzado su límite de envío.');
+    return; // Detiene el proceso después de intentar con todas las cuentas
+  }
+
   const mailOptions = {
     from: 'info@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: subject,
     text: text,
-  }
+  };
 
+  const transporter = transporters[currentTransporterIndex];
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log('Error al enviar el correo:', error)
+      console.log('Error al enviar el correo con la cuenta actual:', error);
+      currentTransporterIndex = (currentTransporterIndex + 1) % transporters.length;
+      retryCount++; // Incrementa el contador de reintentos
+      sendEmail(to, subject, text); // Reintenta enviar el correo con la siguiente cuenta
     } else {
-      console.log('Correo enviado:', info.response)
+      console.log('Correo enviado:', info.response);
+      currentTransporterIndex = 0; // Restablece el índice si se ha enviado con éxito
+      retryCount = 0; // Restablece el contador de reintentos
     }
-  })
-}
+  });
+};
 
 // Mapeo de hospitales a correos electrónicos de administradores
 const emailMap = {
