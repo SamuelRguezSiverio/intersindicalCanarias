@@ -19,7 +19,7 @@ const transporters = [
       rejectUnauthorized: false,
     },
   }),
-  {
+  nodemailer.createTransport({
     host: 'smtp.alzados.org',
     port: 465,
     secure: true,
@@ -30,7 +30,7 @@ const transporters = [
     tls: {
       rejectUnauthorized: false,
     },
-  }
+  })
 ];
 
 let currentTransporterIndex = 0;
