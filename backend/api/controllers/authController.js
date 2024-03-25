@@ -8,7 +8,7 @@ const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración de los transportistas
 const transporters = [
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -20,7 +20,7 @@ const transporters = [
     },
   },
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -32,7 +32,7 @@ const transporters = [
     },
   },
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -44,7 +44,7 @@ const transporters = [
     },
   },
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -56,7 +56,7 @@ const transporters = [
     },
   },
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -68,7 +68,7 @@ const transporters = [
     },
   },
   {
-    host: 'smtp.linux03.virtualnodo.net',
+    host: 'mail.alzados.org',
     port: 465,
     secure: true,
     auth: {
