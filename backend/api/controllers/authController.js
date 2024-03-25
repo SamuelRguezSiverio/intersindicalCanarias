@@ -10,15 +10,20 @@ let currentEmailConfigIndex = 0
 let emailConfigFound = false
 
 async function sendMail(to, subject, text) {
-  const emailConfig = await getActiveEmailConfig()
+  const emailConfig = await getActiveEmailConfig();
 
   const transporter = nodemailer.createTransport({
-    ...emailConfig,
-    helo: {
-      name: 'alzados.org',
+    host: emailConfig.host,
+    port: emailConfig.port,
+    secure: emailConfig.secure,
+    auth: {
+      user: emailConfig.auth.user,
+      pass: emailConfig.auth.pass,
     },
+    tls: emailConfig.tls,
+    ignoreTLS: emailConfig.ignoreTLS,
   });
-  
+
   const mailOptions = {
     from: emailConfig.auth.user,
     to: to,
