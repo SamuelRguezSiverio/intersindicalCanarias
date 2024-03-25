@@ -5,119 +5,119 @@ const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración del transportador de nodemailer
-const transporter = nodemailer.createTransport({
-  host: 'smtp.alzados.org',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'info@alzados.org', // Reemplaza con tu usuario
-    pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
+// Configuración de los transportistas
+const transporters = [
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'info@alzados.org',
+      pass: 'sW71<A1Y>9_.',
+    },
   },
-  tls: {
-    rejectUnauthorized: false,
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'infovalidaciones1@alzados.org',
+      pass: 'rFucMLdvg78spAcAbMqU',
+    },
   },
-})
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'infovalidaciones2@alzados.org',
+      pass: 'MtD83C2SmvhYC3CtRqyT',
+    },
+  },
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'infovalidaciones3@alzados.org',
+      pass: 'cJ95rQQ9z4x9S9hTLN6u',
+    },
+  },
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'infovalidaciones4@alzados.org',
+      pass: 'tPL7BBpcqpCWdaw2eEXU',
+    },
+  },
+  {
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'infovalidaciones5@alzados.org',
+      pass: 'WsHucZRAYVSuZHjGHPeU',
+    },
+  },
+  // Añade más configuraciones según sea necesario
+]
 
-// Función para enviar emails
+// Crear un array de nodemailer transporters
+const nodemailerTransporters = transporters.map((transporterConfig) =>
+  nodemailer.createTransport(transporterConfig)
+)
+
+let currentTransporterIndex = 0
+
+// Función para enviar emails que cambia al siguiente transporter si uno falla
 const sendEmail = (to, subject, text) => {
   const mailOptions = {
-    from: 'info@alzados.org', // Reemplaza con tu correo
+    from: transporters[currentTransporterIndex].auth.user,
     to: to,
     subject: subject,
     text: text,
   }
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error al enviar el correo:', error)
-    } else {
-      console.log('Correo enviado:', info.response)
-    }
-  })
-}
-
-// Envío de recovery pass
-
-const transporter2 = nodemailer.createTransport({
-  host: 'smtp.alzados.org',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'infovalidaciones1@alzados.org', // Reemplaza con tu usuario
-    pass: 'rFucMLdvg78spAcAbMqU', // Reemplaza con tu contraseña
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-})
-
-// Función para enviar emails
-const sendEmail2 = (to, subject, text) => {
-  const mailOptions = {
-    from: 'infovalidaciones1@alzados.org', // Reemplaza con tu correo
-    to: to,
-    subject: subject,
-    text: text,
+  const sendUsingNextTransporter = () => {
+    nodemailerTransporters[currentTransporterIndex].sendMail(
+      mailOptions,
+      (error, info) => {
+        if (error) {
+          console.log(
+            'Error al enviar el correo con el transporter actual:',
+            error
+          )
+          currentTransporterIndex =
+            (currentTransporterIndex + 1) % nodemailerTransporters.length
+          sendUsingNextTransporter() // Intenta con el siguiente transporter
+        } else {
+          console.log('Correo enviado:', info.response)
+        }
+      }
+    )
   }
 
-  transporter2.sendEmail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error al enviar el correo:', error)
-    } else {
-      console.log('Correo enviado:', info.response)
-    }
-  })
+  sendUsingNextTransporter()
 }
 
-
-// Envío de registro a admins
-
-const transporter3 = nodemailer.createTransport({
-  host: 'smtp.alzados.org',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'infovalidaciones2@alzados.org', // Reemplaza con tu usuario
-    pass: 'MtD83C2SmvhYC3CtRqyT', // Reemplaza con tu contraseña
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-})
-
-// Función para enviar emails
-const sendEmail3 = (to, subject, text) => {
-  const mailOptions = {
-    from: 'infovalidaciones2@alzados.org', // Reemplaza con tu correo
-    to: to,
-    subject: subject,
-    text: text,
-  }
-
-  transporter3.sendEmail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error al enviar el correo:', error)
-    } else {
-      console.log('Correo enviado:', info.response)
-    }
-  })
-}
 // Mapeo de hospitales a correos electrónicos de administradores
 const emailMap = {
   'LA PALMA': 'intersindicalhuc@alzados.org',
   'LA GOMERA': 'intersindicalhunsc@alzados.org',
   'EL HIERRO': 'intersindicalhunsc@alzados.org',
-  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
-  'LANZAROTE': 'intersindicallanzarote@alzados.org',
+  FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
+  LANZAROTE: 'intersindicallanzarote@alzados.org',
   'Hospital Universitario de Canarias': 'intersindicalhuc@alzados.org',
   'Complejo Hospitalario de la Candelaria': 'intersindicalhunsc@alzados.org',
   'GAP Tenerife': 'intersindicalhunsc@alzados.org',
-  'CHUIMI': 'intersindicalgrancanaria@alzados.org',
-  'Negrín': 'intersindicalgrancanaria@alzados.org',
+  CHUIMI: 'intersindicalgrancanaria@alzados.org',
+  Negrín: 'intersindicalgrancanaria@alzados.org',
   'Atención Primaria Gran Canaria': 'intersindicalgrancanaria@alzados.org',
   'JASS Cabildo': 'intersindicalgrancanaria@alzados.org',
   'Centros Privados': 'intersindicalgrancanaria@alzados.org',
-};
+}
 
 async function login(req, res) {
   try {
@@ -188,8 +188,17 @@ const validatePassword = (password) => {
 
 async function signup(req, res) {
   try {
-    let { name, surName, nif, email, password, mobile, category, hospital, workPlace } =
-      req.body
+    let {
+      name,
+      surName,
+      nif,
+      email,
+      password,
+      mobile,
+      category,
+      hospital,
+      workPlace,
+    } = req.body
 
     console.log('Inicio del registro:', req.body) // Log de inicio
 
@@ -261,7 +270,7 @@ async function signup(req, res) {
     // Log del token
     console.log('Token generado:', token)
     // Obtener el correo electrónico del administrador basado en el hospital
-    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital];
+    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital]
 
     if (adminEmail) {
       // Enviar correo electrónico al usuario registrado
@@ -272,7 +281,7 @@ async function signup(req, res) {
       )
 
       // Enviar correo electrónico al administrador correspondiente
-      sendEmail3(
+      sendEmail(
         adminEmail,
         'Nuevo registro',
         `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
@@ -305,29 +314,30 @@ async function signup(req, res) {
 async function getAdminsByHospital(req, res) {
   try {
     // Asumiendo que el correo electrónico del admin está incluido en el token JWT
-    const authHeader = req.headers.authorization;
-    const tokenStart = authHeader.indexOf(' ') + 1; // Encontrar el inicio del token
-    const token = authHeader.substring(tokenStart); // Extraer el token del header
-    const decoded = jwt.verify(token, process.env.SECRET); // Decodificar el token
+    const authHeader = req.headers.authorization
+    const tokenStart = authHeader.indexOf(' ') + 1 // Encontrar el inicio del token
+    const token = authHeader.substring(tokenStart) // Extraer el token del header
+    const decoded = jwt.verify(token, process.env.SECRET) // Decodificar el token
 
     // Obtener la lista de hospitales y centros de trabajo basados en el correo electrónico del admin
-    const adminHospitalsAndCenters = Object.keys(emailMap).filter(key => emailMap[key] === decoded.email);
+    const adminHospitalsAndCenters = Object.keys(emailMap).filter(
+      (key) => emailMap[key] === decoded.email
+    )
 
     const admins = await Admin.findAll({
       where: {
         [Op.or]: [
           { hospital: adminHospitalsAndCenters },
-          { workPlace: adminHospitalsAndCenters }
-        ]
+          { workPlace: adminHospitalsAndCenters },
+        ],
       },
-    });
+    })
 
-    return res.status(200).json(admins);
+    return res.status(200).json(admins)
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error.message)
   }
 }
-
 
 const sendActivationEmail = async (to, name) => {
   const mailOptions = {
@@ -448,7 +458,7 @@ async function forgotPassword(req, res) {
   const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`
 
   try {
-    await sendEmail2(
+    await sendEmail(
       user.email,
       'Instrucciones para restablecer la contraseña',
       message
@@ -504,12 +514,10 @@ async function getResetPasswordToken(req, res) {
 
     if (!user) {
       // Si no se encuentra el usuario o el token ha expirado, enviar una respuesta de error
-      return res
-        .status(404)
-        .json({
-          message:
-            'El enlace de restablecimiento de contraseña es inválido o ha expirado.',
-        })
+      return res.status(404).json({
+        message:
+          'El enlace de restablecimiento de contraseña es inválido o ha expirado.',
+      })
     }
 
     // Si el token es válido, redirigir al usuario a la página de restablecimiento de contraseña en el cliente
@@ -529,17 +537,17 @@ async function getResetPasswordToken(req, res) {
 
 async function deleteAdminById(req, res) {
   try {
-    const { id } = req.params; // Obtener el ID del administrador de los parámetros de la ruta
-    const admin = await Admin.findOne({ where: { id } });
+    const { id } = req.params // Obtener el ID del administrador de los parámetros de la ruta
+    const admin = await Admin.findOne({ where: { id } })
 
     if (!admin) {
-      return res.status(404).send('Administrador no encontrado');
+      return res.status(404).send('Administrador no encontrado')
     }
 
-    await admin.destroy(); // Utiliza el método adecuado para eliminar el registro en tu ORM
-    return res.status(200).send('Administrador eliminado con éxito');
+    await admin.destroy() // Utiliza el método adecuado para eliminar el registro en tu ORM
+    return res.status(200).send('Administrador eliminado con éxito')
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error.message)
   }
 }
 
@@ -552,5 +560,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   getResetPasswordToken,
-  deleteAdminById
+  deleteAdminById,
 }
