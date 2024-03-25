@@ -8,7 +8,7 @@ const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración de los transportistas
 const transporters = [
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -16,11 +16,11 @@ const transporters = [
       pass: 'sW71<A1Y>9_.',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -28,11 +28,11 @@ const transporters = [
       pass: 'rFucMLdvg78spAcAbMqU',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -40,11 +40,11 @@ const transporters = [
       pass: 'MtD83C2SmvhYC3CtRqyT',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -52,11 +52,11 @@ const transporters = [
       pass: 'cJ95rQQ9z4x9S9hTLN6u',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
@@ -64,7 +64,7 @@ const transporters = [
       pass: 'tPL7BBpcqpCWdaw2eEXU',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   {
@@ -76,7 +76,7 @@ const transporters = [
       pass: 'WsHucZRAYVSuZHjGHPeU',
     },
     tls: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   },
   // Añade más configuraciones según sea necesario
@@ -125,13 +125,13 @@ const emailMap = {
   'LA PALMA': 'intersindicalhuc@alzados.org',
   'LA GOMERA': 'intersindicalhunsc@alzados.org',
   'EL HIERRO': 'intersindicalhunsc@alzados.org',
-  FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
-  LANZAROTE: 'intersindicallanzarote@alzados.org',
+  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
+  'LANZAROTE': 'intersindicallanzarote@alzados.org',
   'Hospital Universitario de Canarias': 'intersindicalhuc@alzados.org',
   'Complejo Hospitalario de la Candelaria': 'intersindicalhunsc@alzados.org',
   'GAP Tenerife': 'intersindicalhunsc@alzados.org',
-  CHUIMI: 'intersindicalgrancanaria@alzados.org',
-  Negrín: 'intersindicalgrancanaria@alzados.org',
+  'CHUIMI': 'intersindicalgrancanaria@alzados.org',
+  'Negrín': 'intersindicalgrancanaria@alzados.org',
   'Atención Primaria Gran Canaria': 'intersindicalgrancanaria@alzados.org',
   'JASS Cabildo': 'intersindicalgrancanaria@alzados.org',
   'Centros Privados': 'intersindicalgrancanaria@alzados.org',
