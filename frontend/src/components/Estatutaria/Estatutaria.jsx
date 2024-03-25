@@ -41,6 +41,7 @@ const Estatutaria = () => {
     "geriatria",
     "gobernanta",
     "grupoAdministrativoFuncionAdministrativa",
+    'grupoGestionFuncionAdministrativa',
     "grupoTecnicoFuncionAdministrativa",
     "hematologiaHemoterapia",
     "ingenieroSuperior",
@@ -152,6 +153,7 @@ const formatos = {
   "geriatria": "Geriatría",
   "gobernanta": "Gobernanta",
   "grupoAdministrativoFuncionAdministrativa": "Grupo Administrativo Función Administrativa",
+  "grupoGestionFuncionAdministrativa": "Grupo de Gestión de la Función Administrativa",
   "grupoTecnicoFuncionAdministrativa": "Grupo Técnico Función Administrativa",
   "hematologiaHemoterapia": "Hematología y Hemoterapia",
   "ingenieroSuperior": "Ingeniero/a Superior",
@@ -219,7 +221,7 @@ const formatos = {
 
   return (
     <div className="estatutaria-container">
-      <h2>Categorías Laborales</h2>
+      <h2>Categorías Profesionales</h2>
       <input
         type="text"
         placeholder="Buscar categoría..."

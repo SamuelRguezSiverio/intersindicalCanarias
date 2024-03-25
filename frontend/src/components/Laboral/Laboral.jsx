@@ -48,7 +48,7 @@ const Laboral = () => {
 
   return (
     <div className="laboral-container">
-      <h2>Categorías Laborales</h2>
+      <h2>Categorías Profesionales</h2>
       <input
         type="text"
         placeholder="Buscar categoría..."

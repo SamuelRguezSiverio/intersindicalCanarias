@@ -20,7 +20,9 @@ import {
   DialogContentText,
   DialogTitle,
   Typography,
-  FormHelperText
+  FormHelperText,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material/'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -57,13 +59,14 @@ function SignupCard({ changeToLogin }) {
     mobile: '',
     category: '',
     hospital: '',
-    workPlace: ''
+    workPlace: '',
   })
   const [errors, setErrors] = useState({})
   const [isPassVisible, setIsPassVisible] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
-  const [selectedHospital, setSelectedHospital] = useState('');
-  const [workPlaces, setWorkPlaces] = useState([]);
+  const [selectedHospital, setSelectedHospital] = useState('')
+  const [workPlaces, setWorkPlaces] = useState([])
+  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false)
 
   useEffect(() => {
     let timer
@@ -76,24 +79,36 @@ function SignupCard({ changeToLogin }) {
   }, [openDialog])
 
   const hospitalsWithCenters = {
-    'TENERIFE': ['Hospital Universitario de Canarias', 'Complejo Hospitalario de la Candelaria', 'GAP Tenerife'],
-    'GRAN CANARIA': ['CHUIMI', 'Negrín', 'Atención Primaria Gran Canaria', 'JASS Cabildo', 'Centros Privados'],
+    TENERIFE: [
+      'Hospital Universitario de Canarias',
+      'Complejo Hospitalario de la Candelaria',
+      'GAP Tenerife',
+    ],
+    'GRAN CANARIA': [
+      'CHUIMI',
+      'Negrín',
+      'Atención Primaria Gran Canaria',
+      'JASS Cabildo',
+      'Centros Privados',
+    ],
     // Añade aquí otros hospitales con centros si los hay
-  };
+  }
+
+  const handlePolicyChange = (event) => {
+    setIsPolicyAccepted(event.target.checked)
+  }
 
   const handleHospitalChange = (event) => {
-    const selectedHospital = event.target.value;
-    setSelectedHospital(selectedHospital);
-    setFormValues({ ...formValues, hospital: selectedHospital, workPlace: '' });
-  
+    const selectedHospital = event.target.value
+    setSelectedHospital(selectedHospital)
+    setFormValues({ ...formValues, hospital: selectedHospital, workPlace: '' })
+
     if (hospitalsWithCenters[selectedHospital]) {
-      setWorkPlaces(hospitalsWithCenters[selectedHospital]);
+      setWorkPlaces(hospitalsWithCenters[selectedHospital])
     } else {
-      setWorkPlaces([]);
+      setWorkPlaces([])
     }
-  };
-  
-  
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -116,18 +131,23 @@ function SignupCard({ changeToLogin }) {
     tempErrors.hospital = formValues.hospital
       ? ''
       : 'Este campo es obligatorio.'
-      if (hospitalsWithCenters[formValues.hospital] && hospitalsWithCenters[formValues.hospital].length > 0) {
-        tempErrors.workPlace = formValues.workPlace ? '' : 'Este campo es obligatorio.';
-      } else {
-        tempErrors.workPlace = ''; // No es obligatorio si no hay centros
-      }
-    
-      setErrors(tempErrors);
-      return Object.values(tempErrors).every((x) => x === '');
-    };
+    if (
+      hospitalsWithCenters[formValues.hospital] &&
+      hospitalsWithCenters[formValues.hospital].length > 0
+    ) {
+      tempErrors.workPlace = formValues.workPlace
+        ? ''
+        : 'Este campo es obligatorio.'
+    } else {
+      tempErrors.workPlace = '' // No es obligatorio si no hay centros
+    }
+
+    setErrors(tempErrors)
+    return Object.values(tempErrors).every((x) => x === '')
+  }
 
   const onSignup = async () => {
-    if (validateForm()) {
+    if (isPolicyAccepted && validateForm()) {
       const dataInSignup = {
         name: formValues.name,
         surName: formValues.surName,
@@ -137,7 +157,7 @@ function SignupCard({ changeToLogin }) {
         mobile: formValues.mobile,
         category: formValues.category,
         hospital: formValues.hospital,
-        workPlace: formValues.workPlace
+        workPlace: formValues.workPlace,
       }
       try {
         const apiResponse = await signup(dataInSignup)
@@ -412,62 +432,62 @@ function SignupCard({ changeToLogin }) {
               onChange={handleHospitalChange}
               label="Hospital"
             >
-              <MenuItem
-                value="TENERIFE"
-              >
-                TENERIFE
-              </MenuItem>
-              <MenuItem
-                value="LA PALMA"
-              >
-                LA PALMA
-              </MenuItem>
-              <MenuItem
-                value="LA GOMERA"
-              >
-                LA GOMERA
-              </MenuItem>
-              <MenuItem
-                value="EL HIERRO"
-              >
-                EL HIERRO
-              </MenuItem>
-              <MenuItem
-                value="GRAN CANARIA"
-              >
-                GRAN CANARIA
-              </MenuItem>
-              <MenuItem
-                value="FUERTEVENTURA"
-              >
-                FUERTEVENTURA
-              </MenuItem>
-              <MenuItem
-                value="LANZAROTE"
-              >
-                LANZAROTE
-              </MenuItem>
+              <MenuItem value="TENERIFE">TENERIFE</MenuItem>
+              <MenuItem value="LA PALMA">LA PALMA</MenuItem>
+              <MenuItem value="LA GOMERA">LA GOMERA</MenuItem>
+              <MenuItem value="EL HIERRO">EL HIERRO</MenuItem>
+              <MenuItem value="GRAN CANARIA">GRAN CANARIA</MenuItem>
+              <MenuItem value="FUERTEVENTURA">FUERTEVENTURA</MenuItem>
+              <MenuItem value="LANZAROTE">LANZAROTE</MenuItem>
             </Select>
           </FormControl>
 
           {selectedHospital && workPlaces.length > 0 && (
-          <FormControl variant="outlined" fullWidth required error={!!errors.workPlace}>
-            <InputLabel id="workPlace-label">Centro de Trabajo</InputLabel>
-            <Select
-              name="workPlace"
-              labelId="workPlace-label"
-              value={formValues.workPlace}
-              onChange={(e) => setFormValues({ ...formValues, workPlace: e.target.value })}
-              label="Centro de Trabajo"
+            <FormControl
+              variant="outlined"
+              fullWidth
+              required
+              error={!!errors.workPlace}
             >
-              {workPlaces.map((workPlace, index) => (
-                <MenuItem key={index} value={workPlace}>
-                  {workPlace}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
+              <InputLabel id="workPlace-label">Centro de Trabajo</InputLabel>
+              <Select
+                name="workPlace"
+                labelId="workPlace-label"
+                value={formValues.workPlace}
+                onChange={(e) =>
+                  setFormValues({ ...formValues, workPlace: e.target.value })
+                }
+                label="Centro de Trabajo"
+              >
+                {workPlaces.map((workPlace, index) => (
+                  <MenuItem key={index} value={workPlace}>
+                    {workPlace}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+          <FormControl required error={!isPolicyAccepted} component="fieldset" sx={{ margin: '10px 0' }}>
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={isPolicyAccepted}
+        onChange={handlePolicyChange}
+        name="policyAccepted"
+        color="primary"
+      />
+    }
+    label={
+      <>
+        Acepto haber leído la <a href="https://intersindicalcanariasalud.org/politica-de-proteccion-de-datos/" target="_blank">política de protección de datos.</a>
+      </>
+    }
+  />
+  {!isPolicyAccepted && (
+    <FormHelperText>Debes aceptar la política de privacidad para continuar.</FormHelperText>
+  )}
+</FormControl>
+
           {errors.form && (
             <Typography color="error" sx={{ mt: 2 }}>
               {errors.form}
@@ -490,6 +510,7 @@ function SignupCard({ changeToLogin }) {
           <Button
             type="submit"
             variant="contained"
+            disabled={!isPolicyAccepted}
             onClick={onSignup}
             sx={{
               mb: 2,

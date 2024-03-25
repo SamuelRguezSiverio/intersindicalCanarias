@@ -1,41 +1,91 @@
 const Admin = require('../models/adminModel')
-
+const emailConfigs = require('./emailConfig');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
-// Configuración del transportador de nodemailer
-const transporter = nodemailer.createTransport({
-  host: 'smtp.alzados.org',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'info@alzados.org', // Reemplaza con tu usuario
-    pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-})
 
-// Función para enviar emails
-const sendEmail = (to, subject, text) => {
+// // Configuración del transportador de nodemailer
+// const transporter = nodemailer.createTransport({
+//   host: 'smtp.alzados.org',
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: 'info@alzados.org', // Reemplaza con tu usuario
+//     pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
+//   },
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+// })
+
+// // Función para enviar emails
+// const sendEmail = (to, subject, text) => {
+//   const mailOptions = {
+//     from: 'info@alzados.org', // Reemplaza con tu correo
+//     to: to,
+//     subject: subject,
+//     text: text,
+//   }
+
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       console.log('Error al enviar el correo:', error)
+//     } else {
+//       console.log('Correo enviado:', info.response)
+//     }
+//   })
+// }
+
+let currentEmailConfigIndex = 0;
+
+async function sendMail(to, subject, text) {
+  const emailConfig = await getActiveEmailConfig();
+
+  const transporter = nodemailer.createTransport(emailConfig);
+
   const mailOptions = {
-    from: 'info@alzados.org', // Reemplaza con tu correo
+    from: emailConfig.auth.user,
     to: to,
     subject: subject,
     text: text,
-  }
+  };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.log('Error al enviar el correo:', error)
+      console.error('Error al enviar el correo:', error);
     } else {
-      console.log('Correo enviado:', info.response)
+      console.log('Correo enviado:', info.response);
     }
-  })
+  });
 }
+
+async function getActiveEmailConfig() {
+  const emailConfig = emailConfigs[currentEmailConfigIndex];
+
+  const transporter = nodemailer.createTransport(emailConfig);
+
+  try {
+    await transporter.sendMail({
+      from: emailConfig.auth.user,
+      to: 'info@alzados.org',
+      subject: 'Correo de prueba',
+      text: 'Este es un correo de prueba para verificar si la configuración de correo electrónico está bloqueada',
+    });
+
+    currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
+
+    return emailConfig;
+  } catch (error) {
+    console.error('Error al enviar el correo de prueba. Intentando con la siguiente configuración de correo electrónico.', error);
+
+    currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
+
+    return getActiveEmailConfig();
+  }
+}
+
 
 // Mapeo de hospitales a correos electrónicos de administradores
 const emailMap = {
@@ -200,14 +250,14 @@ async function signup(req, res) {
 
     if (adminEmail) {
       // Enviar correo electrónico al usuario registrado
-      sendEmail(
+      sendMail(
         email,
         'Registro exitoso',
         'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y, posteriormente, recibirás un email de activación de la cuenta, entonces podrás iniciar sesión.'
       )
 
       // Enviar correo electrónico al administrador correspondiente
-      sendEmail(
+      sendMail(
         adminEmail,
         'Nuevo registro',
         `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
@@ -383,7 +433,7 @@ async function forgotPassword(req, res) {
   const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`
 
   try {
-    await sendEmail(
+    await sendMail(
       user.email,
       'Instrucciones para restablecer la contraseña',
       message
