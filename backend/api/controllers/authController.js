@@ -3,77 +3,78 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
+require('dotenv').config();
 const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración del transportador de nodemailer
 // Configuración de los transportistas
 const transporters = [
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'info@alzados.org',
-      pass: 'sW71<A1Y>9_.',
+      user: process.env.SMTP_USER1,
+      pass: process.env.SMTP_PASS1,
     },
     tls: {
       rejectUnauthorized: false,
     },
   },
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'infovalidaciones1@alzados.org',
-      pass: 'rFucMLdvg78spAcAbMqU',
+      user: process.env.SMTP_USER2,
+      pass: process.env.SMTP_PASS2,
     },
     tls: {
       rejectUnauthorized: false,
     },
   },
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'infovalidaciones2@alzados.org',
-      pass: 'MtD83C2SmvhYC3CtRqyT',
+      user: process.env.SMTP_USER3,
+      pass: process.env.SMTP_PASS3,
     },
     tls: {
       rejectUnauthorized: false,
     },
   },
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'infovalidaciones3@alzados.org',
-      pass: 'cJ95rQQ9z4x9S9hTLN6u',
+      user: process.env.SMTP_USER4,
+      pass: process.env.SMTP_PASS4,
     },
     tls: {
       rejectUnauthorized: false,
     },
   },
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'infovalidaciones4@alzados.org',
-      pass: 'tPL7BBpcqpCWdaw2eEXU',
+      user: process.env.SMTP_USER5,
+      pass: process.env.SMTP_PASS5,
     },
     tls: {
       rejectUnauthorized: false,
     },
   },
   {
-    host: 'smtp.alzados.org',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     secure: true,
     auth: {
-      user: 'infovalidaciones5@alzados.org',
-      pass: 'WsHucZRAYVSuZHjGHPeU',
+      user: process.env.SMTP_USER6,
+      pass: process.env.SMTP_PASS6,
     },
     tls: {
       rejectUnauthorized: false,
