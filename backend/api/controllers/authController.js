@@ -1,108 +1,80 @@
 const Admin = require('../models/adminModel')
-const emailConfigs = require('./emailConfig');
+const emailConfigs = require('./emailConfig')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 
-// // Configuración del transportador de nodemailer
-// const transporter = nodemailer.createTransport({
-//   host: 'smtp.alzados.org',
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: 'info@alzados.org', // Reemplaza con tu usuario
-//     pass: 'sW71<A1Y>9_.', // Reemplaza con tu contraseña
-//   },
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-// })
-
-// // Función para enviar emails
-// const sendEmail = (to, subject, text) => {
-//   const mailOptions = {
-//     from: 'info@alzados.org', // Reemplaza con tu correo
-//     to: to,
-//     subject: subject,
-//     text: text,
-//   }
-
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//       console.log('Error al enviar el correo:', error)
-//     } else {
-//       console.log('Correo enviado:', info.response)
-//     }
-//   })
-// }
-
-let currentEmailConfigIndex = 0;
+let currentEmailConfigIndex = 0
+let emailConfigFound = false
 
 async function sendMail(to, subject, text) {
-  const emailConfig = await getActiveEmailConfig();
+  const emailConfig = await getActiveEmailConfig()
 
-  const transporter = nodemailer.createTransport(emailConfig);
+  const transporter = nodemailer.createTransport(emailConfig)
 
   const mailOptions = {
     from: emailConfig.auth.user,
     to: to,
     subject: subject,
     text: text,
-  };
+  }
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error al enviar el correo:', error);
+      console.error('Error al enviar el correo:', error)
     } else {
-      console.log('Correo enviado:', info.response);
+      console.log('Correo enviado:', info.response)
     }
-  });
+  })
 }
 
 async function getActiveEmailConfig() {
-  const emailConfig = emailConfigs[currentEmailConfigIndex];
+  while (currentEmailConfigIndex < emailConfigs.length && !emailConfigFound) {
+    const emailConfig = emailConfigs[currentEmailConfigIndex];
 
-  const transporter = nodemailer.createTransport(emailConfig);
+    const transporter = nodemailer.createTransport(emailConfig);
 
-  try {
-    await transporter.sendMail({
-      from: emailConfig.auth.user,
-      to: 'info@alzados.org',
-      subject: 'Correo de prueba',
-      text: 'Este es un correo de prueba para verificar si la configuración de correo electrónico está bloqueada',
-    });
+    try {
+      await transporter.sendMail({
+        from: emailConfig.auth.user,
+        to: 'info@alzados.org',
+        subject: 'Correo de prueba',
+        text: 'Este es un correo de prueba para verificar si la configuración de correo electrónico está bloqueada',
+      });
 
-    currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
+      emailConfigFound = true;
+    } catch (error) {
+      console.error('Error al enviar el correo de prueba. Intentando con la siguiente configuración de correo electrónico.', error);
 
-    return emailConfig;
-  } catch (error) {
-    console.error('Error al enviar el correo de prueba. Intentando con la siguiente configuración de correo electrónico.', error);
+      currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
+    }
+  }
 
-    currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
-
-    return getActiveEmailConfig();
+  if (emailConfigFound) {
+    return emailConfigs[currentEmailConfigIndex];
+  } else {
+    throw new Error('No se encontró ninguna configuración de correo electrónico válida.');
   }
 }
-
 
 // Mapeo de hospitales a correos electrónicos de administradores
 const emailMap = {
   'LA PALMA': 'intersindicalhuc@alzados.org',
   'LA GOMERA': 'intersindicalhunsc@alzados.org',
   'EL HIERRO': 'intersindicalhunsc@alzados.org',
-  'FUERTEVENTURA': 'intersindicalfuerteventura@alzados.org',
-  'LANZAROTE': 'intersindicallanzarote@alzados.org',
+  FUERTEVENTURA: 'intersindicalfuerteventura@alzados.org',
+  LANZAROTE: 'intersindicallanzarote@alzados.org',
   'Hospital Universitario de Canarias': 'intersindicalhuc@alzados.org',
   'Complejo Hospitalario de la Candelaria': 'intersindicalhunsc@alzados.org',
   'GAP Tenerife': 'intersindicalhunsc@alzados.org',
-  'CHUIMI': 'intersindicalgrancanaria@alzados.org',
-  'Negrín': 'intersindicalgrancanaria@alzados.org',
+  CHUIMI: 'intersindicalgrancanaria@alzados.org',
+  Negrín: 'intersindicalgrancanaria@alzados.org',
   'Atención Primaria Gran Canaria': 'intersindicalgrancanaria@alzados.org',
   'JASS Cabildo': 'intersindicalgrancanaria@alzados.org',
   'Centros Privados': 'intersindicalgrancanaria@alzados.org',
-};
+}
 
 async function login(req, res) {
   try {
@@ -173,8 +145,17 @@ const validatePassword = (password) => {
 
 async function signup(req, res) {
   try {
-    let { name, surName, nif, email, password, mobile, category, hospital, workPlace } =
-      req.body
+    let {
+      name,
+      surName,
+      nif,
+      email,
+      password,
+      mobile,
+      category,
+      hospital,
+      workPlace,
+    } = req.body
 
     console.log('Inicio del registro:', req.body) // Log de inicio
 
@@ -246,7 +227,7 @@ async function signup(req, res) {
     // Log del token
     console.log('Token generado:', token)
     // Obtener el correo electrónico del administrador basado en el hospital
-    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital];
+    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital]
 
     if (adminEmail) {
       // Enviar correo electrónico al usuario registrado
@@ -290,29 +271,30 @@ async function signup(req, res) {
 async function getAdminsByHospital(req, res) {
   try {
     // Asumiendo que el correo electrónico del admin está incluido en el token JWT
-    const authHeader = req.headers.authorization;
-    const tokenStart = authHeader.indexOf(' ') + 1; // Encontrar el inicio del token
-    const token = authHeader.substring(tokenStart); // Extraer el token del header
-    const decoded = jwt.verify(token, process.env.SECRET); // Decodificar el token
+    const authHeader = req.headers.authorization
+    const tokenStart = authHeader.indexOf(' ') + 1 // Encontrar el inicio del token
+    const token = authHeader.substring(tokenStart) // Extraer el token del header
+    const decoded = jwt.verify(token, process.env.SECRET) // Decodificar el token
 
     // Obtener la lista de hospitales y centros de trabajo basados en el correo electrónico del admin
-    const adminHospitalsAndCenters = Object.keys(emailMap).filter(key => emailMap[key] === decoded.email);
+    const adminHospitalsAndCenters = Object.keys(emailMap).filter(
+      (key) => emailMap[key] === decoded.email
+    )
 
     const admins = await Admin.findAll({
       where: {
         [Op.or]: [
           { hospital: adminHospitalsAndCenters },
-          { workPlace: adminHospitalsAndCenters }
-        ]
+          { workPlace: adminHospitalsAndCenters },
+        ],
       },
-    });
+    })
 
-    return res.status(200).json(admins);
+    return res.status(200).json(admins)
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error.message)
   }
 }
-
 
 const sendActivationEmail = async (to, name) => {
   const mailOptions = {
@@ -489,12 +471,10 @@ async function getResetPasswordToken(req, res) {
 
     if (!user) {
       // Si no se encuentra el usuario o el token ha expirado, enviar una respuesta de error
-      return res
-        .status(404)
-        .json({
-          message:
-            'El enlace de restablecimiento de contraseña es inválido o ha expirado.',
-        })
+      return res.status(404).json({
+        message:
+          'El enlace de restablecimiento de contraseña es inválido o ha expirado.',
+      })
     }
 
     // Si el token es válido, redirigir al usuario a la página de restablecimiento de contraseña en el cliente
@@ -514,17 +494,17 @@ async function getResetPasswordToken(req, res) {
 
 async function deleteAdminById(req, res) {
   try {
-    const { id } = req.params; // Obtener el ID del administrador de los parámetros de la ruta
-    const admin = await Admin.findOne({ where: { id } });
+    const { id } = req.params // Obtener el ID del administrador de los parámetros de la ruta
+    const admin = await Admin.findOne({ where: { id } })
 
     if (!admin) {
-      return res.status(404).send('Administrador no encontrado');
+      return res.status(404).send('Administrador no encontrado')
     }
 
-    await admin.destroy(); // Utiliza el método adecuado para eliminar el registro en tu ORM
-    return res.status(200).send('Administrador eliminado con éxito');
+    await admin.destroy() // Utiliza el método adecuado para eliminar el registro en tu ORM
+    return res.status(200).send('Administrador eliminado con éxito')
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send(error.message)
   }
 }
 
@@ -537,5 +517,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   getResetPasswordToken,
-  deleteAdminById
+  deleteAdminById,
 }
