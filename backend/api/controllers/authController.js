@@ -8,57 +8,75 @@ const { Op } = require('sequelize') // Asegúrate de importar Op de sequelize
 // Configuración de los transportistas
 const transporters = [
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'info@alzados.org',
       pass: 'sW71<A1Y>9_.',
     },
+    tls: {
+      rejectUnauthorized: true,
+    },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'infovalidaciones1@alzados.org',
       pass: 'rFucMLdvg78spAcAbMqU',
     },
+    tls: {
+      rejectUnauthorized: true,
+    },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'infovalidaciones2@alzados.org',
       pass: 'MtD83C2SmvhYC3CtRqyT',
     },
+    tls: {
+      rejectUnauthorized: true,
+    },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'infovalidaciones3@alzados.org',
       pass: 'cJ95rQQ9z4x9S9hTLN6u',
     },
+    tls: {
+      rejectUnauthorized: true,
+    },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'infovalidaciones4@alzados.org',
       pass: 'tPL7BBpcqpCWdaw2eEXU',
     },
+    tls: {
+      rejectUnauthorized: true,
+    },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.linux03.virtualnodo.net',
     port: 465,
     secure: true,
     auth: {
       user: 'infovalidaciones5@alzados.org',
       pass: 'WsHucZRAYVSuZHjGHPeU',
+    },
+    tls: {
+      rejectUnauthorized: true,
     },
   },
   // Añade más configuraciones según sea necesario
