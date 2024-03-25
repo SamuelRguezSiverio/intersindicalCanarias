@@ -60,7 +60,7 @@ const sendEmail2 = (to, subject, text) => {
     text: text,
   }
 
-  transporter2.sendEmail2(mailOptions, (error, info) => {
+  transporter2.sendEmail(mailOptions, (error, info) => {
     if (error) {
       console.log('Error al enviar el correo:', error)
     } else {
@@ -88,13 +88,13 @@ const transporter3 = nodemailer.createTransport({
 // Función para enviar emails
 const sendEmail3 = (to, subject, text) => {
   const mailOptions = {
-    from: 'infovalidaciones3@alzados.org', // Reemplaza con tu correo
+    from: 'infovalidaciones2@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: subject,
     text: text,
   }
 
-  transporter3.sendEmail3(mailOptions, (error, info) => {
+  transporter3.sendEmail(mailOptions, (error, info) => {
     if (error) {
       console.log('Error al enviar el correo:', error)
     } else {
