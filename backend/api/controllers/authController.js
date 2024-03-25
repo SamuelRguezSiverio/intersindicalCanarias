@@ -12,8 +12,13 @@ let emailConfigFound = false
 async function sendMail(to, subject, text) {
   const emailConfig = await getActiveEmailConfig()
 
-  const transporter = nodemailer.createTransport(emailConfig)
-
+  const transporter = nodemailer.createTransport({
+    ...emailConfig,
+    helo: {
+      name: 'alzados.org',
+    },
+  });
+  
   const mailOptions = {
     from: emailConfig.auth.user,
     to: to,
