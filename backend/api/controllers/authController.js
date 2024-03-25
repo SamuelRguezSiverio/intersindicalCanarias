@@ -36,7 +36,10 @@ async function sendMail(to, subject, text) {
 }
 
 async function getActiveEmailConfig() {
-  while (currentEmailConfigIndex < emailConfigs.length && !emailConfigFound) {
+  const maxIterations = 10;
+  let iterations = 0;
+
+  while (currentEmailConfigIndex < emailConfigs.length && !emailConfigFound && iterations < maxIterations) {
     const emailConfig = emailConfigs[currentEmailConfigIndex];
 
     const transporter = nodemailer.createTransport(emailConfig);
@@ -55,12 +58,14 @@ async function getActiveEmailConfig() {
 
       currentEmailConfigIndex = (currentEmailConfigIndex + 1) % emailConfigs.length;
     }
+
+    iterations++;
   }
 
   if (emailConfigFound) {
     return emailConfigs[currentEmailConfigIndex];
   } else {
-    throw new Error('No se encontró ninguna configuración de correo electrónico válida.');
+    throw new Error('No se encontró ninguna configuración de correo electrónico válida después de un número máximo de intentos.');
   }
 }
 
