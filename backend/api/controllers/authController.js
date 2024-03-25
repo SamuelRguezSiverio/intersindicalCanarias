@@ -54,7 +54,7 @@ const transporter2 = nodemailer.createTransport({
 // Función para enviar emails
 const sendEmail2 = (to, subject, text) => {
   const mailOptions = {
-    from: 'info@alzados.org', // Reemplaza con tu correo
+    from: 'infovalidaciones1@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: subject,
     text: text,
@@ -88,7 +88,7 @@ const transporter3 = nodemailer.createTransport({
 // Función para enviar emails
 const sendEmail3 = (to, subject, text) => {
   const mailOptions = {
-    from: 'info@alzados.org', // Reemplaza con tu correo
+    from: 'infovalidaciones3@alzados.org', // Reemplaza con tu correo
     to: to,
     subject: subject,
     text: text,
