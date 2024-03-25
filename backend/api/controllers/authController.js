@@ -36,6 +36,72 @@ const sendEmail = (to, subject, text) => {
   })
 }
 
+// Envío de recovery pass
+
+const transporter2 = nodemailer.createTransport({
+  host: 'smtp.alzados.org',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'infovalidaciones1@alzados.org', // Reemplaza con tu usuario
+    pass: 'rFucMLdvg78spAcAbMqU', // Reemplaza con tu contraseña
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+})
+
+// Función para enviar emails
+const sendEmail2 = (to, subject, text) => {
+  const mailOptions = {
+    from: 'info@alzados.org', // Reemplaza con tu correo
+    to: to,
+    subject: subject,
+    text: text,
+  }
+
+  transporter2.sendEmail2(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error al enviar el correo:', error)
+    } else {
+      console.log('Correo enviado:', info.response)
+    }
+  })
+}
+
+
+// Envío de registro a admins
+
+const transporter3 = nodemailer.createTransport({
+  host: 'smtp.alzados.org',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'infovalidaciones2@alzados.org', // Reemplaza con tu usuario
+    pass: 'MtD83C2SmvhYC3CtRqyT', // Reemplaza con tu contraseña
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+})
+
+// Función para enviar emails
+const sendEmail3 = (to, subject, text) => {
+  const mailOptions = {
+    from: 'info@alzados.org', // Reemplaza con tu correo
+    to: to,
+    subject: subject,
+    text: text,
+  }
+
+  transporter3.sendEmail3(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error al enviar el correo:', error)
+    } else {
+      console.log('Correo enviado:', info.response)
+    }
+  })
+}
 // Mapeo de hospitales a correos electrónicos de administradores
 const emailMap = {
   'LA PALMA': 'intersindicalhuc@alzados.org',
@@ -206,7 +272,7 @@ async function signup(req, res) {
       )
 
       // Enviar correo electrónico al administrador correspondiente
-      sendEmail(
+      sendEmail3(
         adminEmail,
         'Nuevo registro',
         `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
@@ -382,7 +448,7 @@ async function forgotPassword(req, res) {
   const message = `Has solicitado restablecer tu contraseña. Copia y pega el siguiente token en la página de restablecimiento de contraseña: ${resetToken}`
 
   try {
-    await sendEmail(
+    await sendEmail2(
       user.email,
       'Instrucciones para restablecer la contraseña',
       message
