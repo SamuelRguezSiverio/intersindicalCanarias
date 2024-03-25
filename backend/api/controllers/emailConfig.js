@@ -1,9 +1,9 @@
 module.exports = [
   {
     name: 'Grupo 1',
-    host: 'mail.alzados.org',
-    port: 587,
-    secure: false,
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
     auth: {
       user: 'infovalidaciones1@alzados.org',
       pass: 'rFucMLdvg78spAcAbMqU',
@@ -14,9 +14,9 @@ module.exports = [
   },
   {
     name: 'Grupo 2',
-    host: 'mail.alzados.org',
-    port: 587,
-    secure: false,
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
     auth: {
       user: 'infovalidaciones2@alzados.org',
       pass: 'MtD83C2SmvhYC3CtRqyT',
@@ -27,9 +27,9 @@ module.exports = [
   },
   {
     name: 'Grupo 3',
-    host: 'mail.alzados.org',
-    port: 587,
-    secure: false,
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
     auth: {
       user: 'infovalidaciones3@alzados.org',
       pass: 'cJ95rQQ9z4x9S9hTLN6u',
@@ -40,9 +40,9 @@ module.exports = [
   },
   {
     name: 'Grupo 4',
-    host: 'mail.alzados.org',
-    port: 587,
-    secure: false,
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
     auth: {
       user: 'infovalidaciones4@alzados.org',
       pass: 'tPL7BBpcqpCWdaw2eEXU',
@@ -53,9 +53,9 @@ module.exports = [
   },
   {
     name: 'Grupo 5',
-    host: 'mail.alzados.org',
-    port: 587,
-    secure: false,
+    host: 'smtp.alzados.org',
+    port: 465,
+    secure: true,
     auth: {
       user: 'infovalidaciones5@alzados.org',
       pass: 'WsHucZRAYVSuZHjGHPeU',
