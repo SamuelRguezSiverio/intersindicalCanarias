@@ -68,7 +68,7 @@ const transporters = [
     },
   },
   {
-    host: 'mail.alzados.org',
+    host: 'smtp.alzados.org',
     port: 465,
     secure: true,
     auth: {
