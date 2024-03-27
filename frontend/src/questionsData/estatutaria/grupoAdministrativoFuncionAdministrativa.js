@@ -1776,11 +1776,11 @@ const preguntas = [
       'La ley Orgánica 3/2018, de 5 de diciembre, de Protección de datos personales y garantía de los derechos digitales, consta de:',
     group: 'C1',
     category: 'tecnicoSuperiorGestionServicios',
-    correct_answer: 'Noventa y nueve artículos',
+    correct_answer: 'Noventa y siete artículos',
     incorrect_answers: [
       'Noventa artículos',
       'Noventa y cinco artículos',
-      'Noventa y siete artículos',
+      'Noventa y nueve artículos',
     ],
   },
   {
