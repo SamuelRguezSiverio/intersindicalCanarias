@@ -15,8 +15,16 @@ const Admin = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   const fetchAdmins = async () => {
-    const response = await getAdminsByHospital()
-    setAdmins(response.data)
+    try {
+      const response = await getAdminsByHospital()
+      setAdmins(response.data)
+    } catch (error) {
+      console.error('Error fetching admins:', error)
+      if (error.response && error.response.status === 403) {
+        setAdmins([])
+        // Optional: You could add a UI message here
+      }
+    }
   }
 
   useEffect(() => {

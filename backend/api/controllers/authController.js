@@ -157,6 +157,10 @@ async function login(req, res) {
       if (err) return res.status(500).send(err)
       if (!result) return res.status(401).send('Email o contraseña incorrectos')
 
+      // Determinar si es super admin
+      const isSuperAdmin = admin.email === 'admin@alzados.net'
+      const finalIsAdmin = isSuperAdmin ? true : admin.isAdmin
+
       // Añade todos los campos necesarios al payload del token
       const payload = {
         id: admin.id, // Asegúrate de incluir el id del administrador
@@ -169,13 +173,13 @@ async function login(req, res) {
         category: admin.category, // Añade la categoría si es necesario
         hospital: admin.hospital,
         workPlace: admin.workPlace,
-        isAdmin: admin.isAdmin,
+        isAdmin: finalIsAdmin,
         isActive: admin.isActive, // Añade el estado de activación si es necesario
       }
       const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '1h' })
       return res.status(200).json({
         token: token,
-        isAdmin: admin.isAdmin,
+        isAdmin: finalIsAdmin,
         name: admin.name,
         id: admin.id,
       })
@@ -288,26 +292,22 @@ async function signup(req, res) {
 
     // Log del token
     console.log('Token generado:', token)
-    // Obtener el correo electrónico del administrador basado en el hospital
-    const adminEmail = workPlace ? emailMap[workPlace] : emailMap[hospital]
+    // Enviar correo al super admin
+    const adminEmail = 'admin@alzados.net'
 
-    if (adminEmail) {
-      // Enviar correo electrónico al usuario registrado
-      sendEmail(
-        email,
-        'Registro exitoso',
-        'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y, posteriormente, recibirás un email de activación de la cuenta, entonces podrás iniciar sesión.'
-      )
+    // Enviar correo electrónico al usuario registrado
+    sendEmail(
+      email,
+      'Registro exitoso',
+      'Te has registrado exitosamente. Un administrador verificará sus datos de afiliad@ y, posteriormente, recibirás un email de activación de la cuenta, entonces podrás iniciar sesión.'
+    )
 
-      // Enviar correo electrónico al administrador correspondiente
-      sendEmail(
-        adminEmail,
-        'Nuevo registro',
-        `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
-      )
-    } else {
-      console.error('Hospital no encontrado en el mapeo')
-    }
+    // Enviar correo electrónico al administrador correspondiente
+    sendEmail(
+      adminEmail,
+      'Nuevo registro',
+      `El usuario ${email} con NIF/NIE: ${nif} se ha registrado exitosamente.`
+    )
 
     // Respuesta exitosa
     return res.status(200).json({ token: token })
@@ -332,27 +332,19 @@ async function signup(req, res) {
 
 async function getAdminsByHospital(req, res) {
   try {
-    // Asumiendo que el correo electrónico del admin está incluido en el token JWT
     const authHeader = req.headers.authorization
-    const tokenStart = authHeader.indexOf(' ') + 1 // Encontrar el inicio del token
-    const token = authHeader.substring(tokenStart) // Extraer el token del header
-    const decoded = jwt.verify(token, process.env.SECRET) // Decodificar el token
+    const tokenStart = authHeader.indexOf(' ') + 1
+    const token = authHeader.substring(tokenStart)
+    const decoded = jwt.verify(token, process.env.SECRET)
 
-    // Obtener la lista de hospitales y centros de trabajo basados en el correo electrónico del admin
-    const adminHospitalsAndCenters = Object.keys(emailMap).filter(
-      (key) => emailMap[key] === decoded.email
-    )
+    // Verificar si es el super admin
+    if (decoded.email === 'admin@alzados.net') {
+      const admins = await Admin.findAll()
+      return res.status(200).json(admins)
+    }
 
-    const admins = await Admin.findAll({
-      where: {
-        [Op.or]: [
-          { hospital: adminHospitalsAndCenters },
-          { workPlace: adminHospitalsAndCenters },
-        ],
-      },
-    })
-
-    return res.status(200).json(admins)
+    // Si no es el super admin, denegar acceso
+    return res.status(403).send('Acceso denegado. Solo el administrador principal puede ver los usuarios.')
   } catch (error) {
     return res.status(500).send(error.message)
   }
@@ -374,9 +366,41 @@ const sendActivationEmail = async (to, name) => {
   }
 }
 
+// Helper to verify super admin
+const checkSuperAdmin = (req) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader) throw new Error('No token provided')
+  const tokenStart = authHeader.indexOf(' ') + 1
+  const token = authHeader.substring(tokenStart)
+  const decoded = jwt.verify(token, process.env.SECRET)
+  if (decoded.email !== 'admin@alzados.net') {
+     throw new Error('Acceso denegado. Solo el super admin puede realizar esta acción.')
+  }
+  return decoded
+}
+
+// Helper to verify super admin or self
+const checkProfileAccess = (req, targetId) => {
+  const authHeader = req.headers.authorization
+  if (!authHeader) throw new Error('No token provided')
+  const tokenStart = authHeader.indexOf(' ') + 1
+  const token = authHeader.substring(tokenStart)
+  const decoded = jwt.verify(token, process.env.SECRET)
+  
+  const isSuperAdmin = decoded.email === 'admin@alzados.net'
+  const isSelf = targetId && String(decoded.id) === String(targetId)
+
+  if (!isSuperAdmin && !isSelf) {
+     throw new Error('Acceso denegado. No tienes permisos para esta acción.')
+  }
+  return decoded
+}
+
 async function updateAdmin(req, res) {
   try {
     const { id } = req.params
+    checkProfileAccess(req, id)
+    
     const {
       name,
       surName,
@@ -434,6 +458,7 @@ async function updateAdmin(req, res) {
     console.log('Contraseña actualizada:', isPasswordUpdated)
     return res.status(200).json(updatedAdmin)
   } catch (error) {
+    if (error.message.includes('Acceso denegado')) return res.status(403).send(error.message)
     return res.status(500).send(error.message)
   }
 }
@@ -441,6 +466,8 @@ async function updateAdmin(req, res) {
 async function getAdminById(req, res) {
   try {
     const { id } = req.params // Obtener el ID del administrador de los parámetros de la ruta
+    checkProfileAccess(req, id)
+    
     const admin = await Admin.findOne({ where: { id } })
 
     if (!admin) {
@@ -449,6 +476,7 @@ async function getAdminById(req, res) {
 
     return res.status(200).json(admin)
   } catch (error) {
+    if (error.message.includes('Acceso denegado')) return res.status(403).send(error.message)
     return res.status(500).send(error.message)
   }
 }
@@ -556,6 +584,7 @@ async function getResetPasswordToken(req, res) {
 
 async function deleteAdminById(req, res) {
   try {
+    checkSuperAdmin(req)
     const { id } = req.params // Obtener el ID del administrador de los parámetros de la ruta
     const admin = await Admin.findOne({ where: { id } })
 
@@ -566,6 +595,7 @@ async function deleteAdminById(req, res) {
     await admin.destroy() // Utiliza el método adecuado para eliminar el registro en tu ORM
     return res.status(200).send('Administrador eliminado con éxito')
   } catch (error) {
+    if (error.message.includes('Acceso denegado')) return res.status(403).send(error.message)
     return res.status(500).send(error.message)
   }
 }
