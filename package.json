@@ -1,0 +1,18 @@
+{
+    "name": "intersindical-canarias-unified",
+    "version": "1.0.0",
+    "description": "Unified deployment for Intersindical Canarias",
+    "scripts": {
+        "postinstall": "npm run install:all",
+        "install:all": "cd frontend && npm install && cd ../backend && npm install",
+        "build": "cd frontend && npm run build",
+        "start": "cd backend && npm start",
+        "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\""
+    },
+    "dependencies": {
+        "concurrently": "^8.0.0"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
