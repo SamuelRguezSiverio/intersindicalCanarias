@@ -102,7 +102,7 @@ const Estatutaria = () => {
     'trabajadorSocial',
     'urologia',
   ]
-
+  
   const [busqueda, setBusqueda] = useState('')
 
   const categoriasFiltradas =

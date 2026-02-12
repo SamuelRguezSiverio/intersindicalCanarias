@@ -3631,10 +3631,10 @@ const preguntas = [
       '¿Qué requisitos debe tener un documento electrónico para ser considerado válido?',
     group: 'C1',
     category: 'tecnicoSuperiorGestionServicios',
-    correct_answer: 'Temporización',
+    correct_answer: 'Tratamiento diferenciado',
     incorrect_answers: [
       'Clasificación',
-      'Tratamiento diferenciado',
+      'Temporización',
       'Catalogación',
     ],
   },
