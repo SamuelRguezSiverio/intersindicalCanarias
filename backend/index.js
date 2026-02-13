@@ -1,3 +1,4 @@
+require('dotenv').config({ path: path.join(__dirname, '../.env') }) 
 require('dotenv').config()
 const { checkConnection, syncModels } = require('./database/index')
 const User = require('./database/relations.js')
