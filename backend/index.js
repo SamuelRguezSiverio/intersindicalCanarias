@@ -1,3 +1,4 @@
+const path = require('path')
 require('dotenv').config({ path: path.join(__dirname, '../.env') }) 
 require('dotenv').config()
 const { checkConnection, syncModels } = require('./database/index')
@@ -11,8 +12,6 @@ async function checkAndSyncPostgreSQL() {
   await checkConnection()
   await syncModels()
 }
-
-const path = require('path')
 
 function initializeAndListenWithExpress() {
   const app = express()
